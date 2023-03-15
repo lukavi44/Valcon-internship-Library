@@ -1,18 +1,18 @@
 import axios from 'axios'
 import { FormEvent, useCallback, useEffect, useState } from 'react'
+import Select, { MultiValue } from 'react-select'
+import { Author, AuthorPost } from '../../../models/author.model'
+import { BookBodyData, BookBodyDataGet } from '../../../models/bookData.model'
+import { getAuthors, postAuthor } from '../../../services/AuthorServices'
 import { postBookRequest } from '../../../services/BooksServices'
 import styles from './ManageBookForm.module.css'
-import Select, { MultiValue } from 'react-select'
-import { getAuthors, postAuthor } from '../../../services/AuthorServices'
 import placeholder from '../../../assets/placeholderImg/placeholder.jpeg'
-import { BookBodyData, BookBodyDataGet } from '../../../models/bookData.model'
-import { Author, AuthorPost } from '../../../models/author.model'
 
-interface FormProps {
+interface EditBookFormProps {
   book: BookBodyDataGet
 }
 
-const ManageBookForm = () => {
+const EditBookForm = ({ book }: EditBookFormProps) => {
   const [authors, setAuthors] = useState<Author[]>([])
   const [isOpenForm, setIsOpenForm] = useState(false)
   const [requestCover, setRequestCover] = useState<Blob>(new Blob())
@@ -21,15 +21,15 @@ const ManageBookForm = () => {
     FirstName: '',
     LastName: '',
   })
-  const [formData, setFormData] = useState<BookBodyData>({
-    Id: 0,
-    Title: '',
-    Description: '',
-    Isbn: '',
-    Quantity: 0,
-    Cover: requestCover,
-    PublishDate: '',
-    AuthorIds: [],
+  const [formData, setFormData] = useState<BookBodyDataGet>({
+    Id: book.Id,
+    Title: book.Title,
+    Description: book.Description,
+    Isbn: book.Isbn,
+    Quantity: book.Quantity,
+    Cover: book.Cover,
+    PublishDate: book.PublishDate,
+    Authors: book.Authors,
   })
 
   const openFormhandler = () => {
@@ -65,7 +65,7 @@ const ManageBookForm = () => {
     }
   }, [])
 
-  const addBookHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+  const editBookHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     try {
       const form = new FormData()
@@ -75,7 +75,7 @@ const ManageBookForm = () => {
       form.append('PublishDate', formData.PublishDate)
       form.append('Quantity', formData.Quantity.toString())
       form.append('Title', formData.Title)
-      formData.AuthorIds.forEach((author) => form.append('AuthorIds', author.Id.toString()))
+      formData.Authors.forEach((author) => form.append('Authors', author.Id.toString()))
 
       await postBookRequest(form)
     } catch (error) {
@@ -109,9 +109,13 @@ const ManageBookForm = () => {
 
   return (
     <>
-      <form className={styles['form-wrapper']} onSubmit={addBookHandler}>
+      <form className={styles['form-wrapper']} onSubmit={editBookHandler}>
         <div className={styles['form-group-column']}>
-          <img className={styles['upload-img']} src={cover ? cover : placeholder} alt='' />
+          <img
+            className={styles['upload-img']}
+            src={book.Cover ? `data:image/png;base64, ${book.Cover}` : placeholder}
+            alt=''
+          />
           <input id='cover' name='cover' type='file' onChange={handleFileChange} />
         </div>
         <div className={styles.bottom}>
@@ -175,7 +179,7 @@ const ManageBookForm = () => {
                 name='authorIds'
                 id='authorIds'
                 options={authors}
-                defaultValue={formData.AuthorIds}
+                defaultValue={formData.Authors}
                 getOptionLabel={(option) => `${option.FirstName} ${option.LastName}`}
                 onChange={onChangeAuthors}
                 isMulti
@@ -222,4 +226,4 @@ const ManageBookForm = () => {
   )
 }
 
-export default ManageBookForm
+export default EditBookForm

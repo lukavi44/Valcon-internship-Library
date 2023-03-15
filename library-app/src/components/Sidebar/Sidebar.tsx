@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styles from './Sidebar.module.css'
 import home from '../../assets/icons/home.png'
 import account from '../../assets/icons/account.png' // loader comp za slike
@@ -7,9 +7,12 @@ import { useNavigate } from 'react-router-dom'
 import Modal from '../Layout/Modal'
 import ManageBookForm from '../Books/BooksList/ManageBookForm'
 
-const Sidebar = ({ isLoggedIn }: any) => {
-  const [isModalOpened, setIsModalOpened] = useState(false)
+interface SidebarProps {
+  isLoggedIn: boolean
+}
 
+const Sidebar = ({ isLoggedIn }: SidebarProps) => {
+  const [isModalOpened, setIsModalOpened] = useState(false)
   const [adminOptions, setAdminOptions] = useState(false)
 
   const navigateTo = useNavigate()
@@ -17,10 +20,6 @@ const Sidebar = ({ isLoggedIn }: any) => {
   const handleHomeNavigation = () => {
     navigateTo('/')
   }
-
-  useEffect(() => {
-    console.log(isLoggedIn)
-  })
 
   return (
     <React.Fragment>
@@ -44,7 +43,7 @@ const Sidebar = ({ isLoggedIn }: any) => {
             </button>
           </div>
         )}
-        {adminOptions && (
+        {adminOptions && isLoggedIn && (
           <nav className={styles.sidebar}>
             <div className={styles['btn-holder']}>
               <button

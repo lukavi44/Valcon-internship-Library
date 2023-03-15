@@ -4,20 +4,28 @@ import styles from './Header.module.css'
 import sort from '../../assets/icons/sort.png'
 import { NavLink } from 'react-router-dom'
 import { deleteLocalStorage } from '../../helpers/manageLocalStorage'
+import Where from '../../models/where.model'
+
+interface HeaderProps {
+  searchTermValue: string
+  setSearchTermValue: Dispatch<SetStateAction<string>>
+  isLoggedIn: boolean
+  setIsLoggedIn: Dispatch<SetStateAction<boolean>>
+  setFilter: Dispatch<SetStateAction<Where[]>>
+  setSort: Dispatch<SetStateAction<string[]>>
+}
 
 const Header = ({
   searchTermValue,
   setSearchTermValue,
   isLoggedIn,
   setIsLoggedIn,
-}: {
-  searchTermValue: string
-  setSearchTermValue: Dispatch<SetStateAction<string>>
-  isLoggedIn: boolean
-  setIsLoggedIn: Dispatch<SetStateAction<boolean>>
-}) => {
+  setFilter,
+  setSort,
+}: HeaderProps) => {
   const [position, setPosition] = useState(window.scrollY)
   const [isVisible, setIsVisible] = useState(true)
+  const currentPathName = window.location.pathname
 
   const handleLogout = () => {
     deleteLocalStorage()
@@ -46,22 +54,24 @@ const Header = ({
         className={styles['header-container']}
         style={{ visibility: isVisible ? 'visible' : 'hidden' }}
       >
-        <div className={styles['header-left']}>
-          <button className={styles['search-btn']}>
-            <img src={search} alt='' className={styles['search-img']} />
-          </button>
-          <input
-            type='search'
-            name='search'
-            id='search'
-            className={styles.input}
-            value={searchTermValue}
-            onChange={handleInputChange}
-          />
-          <button className={styles.sort}>
-            <img src={sort} alt='' />
-          </button>
-        </div>
+        {isLoggedIn && (
+          <div className={styles['header-left']}>
+            <button className={styles['search-btn']}>
+              <img src={search} alt='' className={styles['search-img']} />
+            </button>
+            <input
+              type='search'
+              name='search'
+              id='search'
+              className={styles.input}
+              value={searchTermValue}
+              onChange={handleInputChange}
+            />
+            <button className={styles.sort}>
+              <img src={sort} alt='' />
+            </button>
+          </div>
+        )}
         <NavLink to='login'>
           {isLoggedIn && (
             <button className={styles['login-btn']} type='button' onClick={handleLogout}>

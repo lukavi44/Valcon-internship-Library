@@ -3,13 +3,18 @@ import Card from '../../UI/Card'
 import styles from './BooksItem.module.css'
 import { useEffect, useState } from 'react'
 import imgPlaceholder from '../../../assets/placeholderImg/placeholder.jpeg'
-import { Link } from 'react-router-dom'
+import Modal from '../../Layout/Modal'
+import ManageBookForm from '../BooksList/ManageBookForm'
+import { removeBookRequest } from '../../../services/BooksServices'
+import EditBookForm from '../BooksList/EditBookForm'
 
 export interface BookProps {
   Book: BookBodyDataGet
 }
 
 const BooksItem = ({ Book }: BookProps) => {
+  const [isModalOpened, setIsModalOpened] = useState(false)
+
   const [coverPlaceholder, setCoverPlaceholder] = useState('')
 
   useEffect(() => {
@@ -46,12 +51,23 @@ const BooksItem = ({ Book }: BookProps) => {
         </div>
       </div>
       <div className={styles['actions-btn-holder']}>
-        <Link to={'details'}>
-          <button className={styles['action-btn']} id={styles.edit}>
-            Edit
-          </button>
-        </Link>
-        <button className={styles['action-btn']} id={styles.delete}>
+        <button
+          className={styles['action-btn']}
+          id={styles.edit}
+          onClick={() => setIsModalOpened(true)}
+        >
+          Edit
+        </button>
+        {isModalOpened && (
+          <Modal onClose={() => setIsModalOpened(false)}>
+            <EditBookForm book={Book} />
+          </Modal>
+        )}
+        <button
+          className={styles['action-btn']}
+          id={styles.delete}
+          onClick={() => removeBookRequest(Book.Id)}
+        >
           Delete
         </button>
         <button className={styles['action-btn']} id={styles.rent}>

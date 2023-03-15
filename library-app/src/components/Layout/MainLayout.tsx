@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { BookBodyDataGet } from '../../models/bookData.model'
+import Where from '../../models/where.model'
 import PrivateRoutes from '../../router/PrivateRoutes'
 import Footer from '../Footer/Footer'
 import Header from '../Header/Header'
@@ -10,65 +12,44 @@ import Sidebar from '../Sidebar/Sidebar'
 import styles from './MainLayout.module.css'
 
 const MainLayout = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [accessToken, setAccessToken] = useState('')
-  const [showHeader, setIsHeaderShowing] = useState(true)
+  const [books, setBooks] = useState<BookBodyDataGet[]>([])
+  const [isLoggedIn, setIsLoggedIn] = useState(true)
+  const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken'))
   const [searchTermValue, setSearchTermValue] = useState('')
-
-  // const token = getAccessToken()
-
-  // useEffect(() => {
-  //   return setAccessToken(token)
-  // }, [])
-
-  // useEffect(() => {
-  //   console.log('triger useeffect searchterm')
-  //   const debounceTimeout = setTimeout(() => {
-  //     search()
-  //   }, 500)
-  //   return () => {
-  //     clearTimeout(debounceTimeout)
-  //   }
-  // }, [searchTermValue])
-
-  // useEffect(() => {
-  //   if (accessToken !== '') {
-  //     setIsLoggedIn(true)
-  //   } else {
-  //     setIsLoggedIn(false)
-  //   }
-  //   console.log(isLoggedIn)
-  // }, [])
-  const currentPathName = window.location.pathname
-
-  useEffect(() => {
-    if (currentPathName === '/login') {
-      setIsHeaderShowing(false)
-    }
-  }, [])
-
-  function search() {
-    console.log(`Searching for ${searchTermValue}...`)
-  }
+  const [filter, setFilter] = useState<Where[]>([])
+  const [sort, setSort] = useState<string[]>([])
 
   return (
     <div className={styles.wrapp}>
       <Sidebar isLoggedIn={isLoggedIn} />
       <div className={styles['inside-wrapp']}>
         <div className={styles.bckgrnd}></div>
-        {showHeader && (
-          <Header
-            searchTermValue={searchTermValue}
-            setSearchTermValue={setSearchTermValue}
-            isLoggedIn={isLoggedIn}
-            setIsLoggedIn={setIsLoggedIn}
-          />
-        )}
+
+        <Header
+          searchTermValue={searchTermValue}
+          setSearchTermValue={setSearchTermValue}
+          isLoggedIn={isLoggedIn}
+          setIsLoggedIn={setIsLoggedIn}
+          setFilter={setFilter}
+          setSort={setSort}
+        />
+
         <Routes>
           <Route element={<PrivateRoutes accessToken={accessToken} />}>
             <Route path='details' element={<BookDetails />} />
           </Route>
-          <Route path='/' element={<Homepage />} />
+          <Route
+            path='/'
+            element={
+              <Homepage
+                books={books}
+                setBooks={setBooks}
+                search={searchTermValue}
+                filter={filter}
+                sort={sort}
+              />
+            }
+          />
           <Route
             path='login'
             element={<Login setIsLoggedIn={setIsLoggedIn} setAccessToken={setAccessToken} />}

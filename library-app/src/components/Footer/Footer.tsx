@@ -7,7 +7,11 @@ import { useNavigate } from 'react-router-dom'
 import Modal from '../Layout/Modal'
 import ManageBookForm from '../Books/BooksList/ManageBookForm'
 
-export const Footer = ({ isLoggedIn }: any) => {
+interface FooterProps {
+  isLoggedIn: boolean
+}
+
+export const Footer = ({ isLoggedIn }: FooterProps) => {
   const [adminOptions, setAdminOptions] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
 

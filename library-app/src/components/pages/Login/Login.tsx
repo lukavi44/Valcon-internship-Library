@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, FormEvent, SetStateAction, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { setLocalStorage } from '../../../helpers/manageLocalStorage'
 import LoginRequest, { LoginRequestData } from '../../../services/auth'
@@ -7,7 +7,7 @@ import styles from './Login.module.css'
 
 interface Props {
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>
-  setAccessToken: Dispatch<SetStateAction<string>>
+  setAccessToken: Dispatch<SetStateAction<string | null>>
 }
 
 const Login = ({ setIsLoggedIn, setAccessToken }: Props) => {
