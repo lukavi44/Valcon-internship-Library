@@ -56,13 +56,12 @@
   align-self: flex-end;
   width: 20%;
 }
-.close-btn {
-}
 
 .bottom {
   display: flex;
   gap: 1rem;
 }
+
 .left,
 .right {
   display: flex;

@@ -23,6 +23,7 @@
   top: 0;
   right: 0;
 }
+
 @media screen and (min-width: 426px) {
   .modal {
     width: 50%;

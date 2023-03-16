@@ -1,6 +1,7 @@
 .header {
   display: none;
 }
+
 @media only screen and (min-width: 426px) {
   .header {
     width: 230px;
@@ -9,23 +10,28 @@
     height: 100vh;
     background-color: #faf0e6;
   }
+
   .btn-holder {
     display: flex;
     align-items: center;
     padding: 2rem 0;
     justify-content: center;
   }
+
   .btn-holder:active {
     background-color: white;
   }
+
   .btn-holder button {
     background: none;
     border: none;
   }
+
   .sidebar {
     display: flex;
     flex-direction: column;
   }
+
   .add-new-book {
     width: 50%;
     text-transform: uppercase;

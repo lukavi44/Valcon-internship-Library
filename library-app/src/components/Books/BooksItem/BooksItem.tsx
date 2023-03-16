@@ -14,7 +14,6 @@ export interface BookProps {
 
 const BooksItem = ({ Book, isLoggedIn }: BookProps) => {
   const [isModalOpened, setIsModalOpened] = useState(false)
-
   const [coverPlaceholder, setCoverPlaceholder] = useState('')
 
   useEffect(() => {

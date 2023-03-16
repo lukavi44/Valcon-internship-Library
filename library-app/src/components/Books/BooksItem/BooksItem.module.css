@@ -1,6 +1,7 @@
 * {
   margin: 0;
 }
+
 .book-holder {
   padding: 2rem;
   display: flex;
@@ -12,10 +13,12 @@
   box-shadow: 20px 20px 23px #e3d9c7;
   height: 200px;
 }
+
 .book-img {
   width: 180px;
   height: 200px;
 }
+
 .about-book {
   display: flex;
   align-items: flex-end;
@@ -23,9 +26,11 @@
   gap: 1rem;
   text-align: end;
 }
+
 label {
   font-weight: bold;
 }
+
 .actions-btn-holder {
   display: flex;
   justify-content: space-around;
@@ -43,9 +48,11 @@ label {
 .action-btn#edit {
   background-color: rgba(0, 0, 255);
 }
+
 .action-btn#delete {
   background-color: rgba(255, 0, 0);
 }
+
 .action-btn#rent {
   background-color: rgba(0, 128, 0);
 }
@@ -53,9 +60,11 @@ label {
 .action-btn#edit:hover {
   opacity: 1;
 }
+
 .action-btn#delete:hover {
   opacity: 1;
 }
+
 .action-btn#rent:hover {
   opacity: 1;
 }
