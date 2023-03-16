@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { BookBodyDataGet } from '../../../models/bookData.model'
+import { PageData } from '../../../models/page.model'
 import Where from '../../../models/where.model'
 import { getBooksRequest } from '../../../services/BooksServices'
 import BooksList from '../../Books/BooksList/BooksList'
@@ -16,9 +17,12 @@ interface HomepageProps {
 }
 
 const Homepage = ({ books, setBooks, search, filter, sort, isLoggedIn }: HomepageProps) => {
-  const [pageNumber, setPageNumber] = useState(1)
+  const [page, setPage] = useState<PageData>({
+    pageLength: 9,
+    pageNumber: 1,
+    totalCount: 0,
+  })
   const [hasMoreBooks, setHasMoreBooks] = useState(true)
-  const pageLength = 9
   const currentSearch = useRef<string>(search)
 
   const fetchBooks = (
@@ -41,19 +45,31 @@ const Homepage = ({ books, setBooks, search, filter, sort, isLoggedIn }: Homepag
   }
 
   const resetPaging = () => {
+    setPage((prevPage) => {
+      return {
+        ...prevPage,
+        totalCount: null,
+        pageNumber: 1,
+      }
+    })
     setBooks([])
-    setPageNumber(1)
   }
+
   useEffect(() => {
     if (currentSearch.current !== search) {
       currentSearch.current = search
       resetPaging()
     }
-    fetchBooks(pageNumber, pageLength, search, filter, sort)
-  }, [pageNumber, search])
+    fetchBooks(page.pageNumber, page.pageLength, search, filter, sort)
+  }, [page.pageNumber, search])
 
   const handleNextPage = () => {
-    setPageNumber((prevPageNumber) => prevPageNumber + 1)
+    setPage((page) => {
+      return {
+        ...page,
+        pageNumber: page.pageNumber + 1,
+      }
+    })
   }
 
   return (
@@ -79,7 +95,6 @@ const Homepage = ({ books, setBooks, search, filter, sort, isLoggedIn }: Homepag
               <div></div>
             </div>
           }
-          endMessage={<h4 style={{ textAlign: 'center' }}>You have browsed all books</h4>}
           scrollableTarget='homepage'
         >
           <BooksList isLoggedIn={isLoggedIn} booksProps={books} />
