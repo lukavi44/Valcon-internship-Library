@@ -1,5 +1,6 @@
 .card {
-  border: 1px solid black;
+  border: 10px solid white;
+  background: transparent;
 }
 @media screen and (min-width: 426px) {
   .card {

@@ -25,20 +25,20 @@ const Sidebar = ({ isLoggedIn }: SidebarProps) => {
     <React.Fragment>
       <nav className={styles.header}>
         <div className={styles['btn-holder']} onClick={handleHomeNavigation}>
-          <button>
+          <button type='button'>
             <img src={home} alt='' />
           </button>
         </div>
         {isLoggedIn && (
           <div className={styles['btn-holder']}>
-            <button>
+            <button type='button'>
               <img src={account} alt='' />
             </button>
           </div>
         )}
         {isLoggedIn && (
           <div className={styles['btn-holder']} onClick={() => setAdminOptions(!adminOptions)}>
-            <button>
+            <button type='button'>
               <img src={showMore} alt='' />
             </button>
           </div>
@@ -48,7 +48,7 @@ const Sidebar = ({ isLoggedIn }: SidebarProps) => {
             <div className={styles['btn-holder']}>
               <button
                 className={styles['add-new-book']}
-                type='submit'
+                type='button'
                 onClick={() => setIsModalOpened(true)}
               >
                 Add New Book +
