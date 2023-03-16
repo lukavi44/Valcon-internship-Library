@@ -39,7 +39,7 @@ const MainLayout = () => {
 
         <Routes>
           <Route element={<PrivateRoutes accessToken={accessToken} />}>
-            <Route path='details' element={<BookDetails />} />
+            <Route path='BookDetails/:id' element={<BookDetails />} />
           </Route>
           <Route
             path='/'

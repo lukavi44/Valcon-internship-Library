@@ -1,16 +1,16 @@
-import axios from 'axios'
 import { FormEvent, useCallback, useEffect, useState } from 'react'
-import { postBookRequest } from '../../../services/BooksServices'
-import styles from './ManageBookForm.module.css'
 import Select, { MultiValue } from 'react-select'
+import axios from 'axios'
+import { postBookRequest } from '../../../services/BooksServices'
 import { getAuthors, postAuthor } from '../../../services/AuthorServices'
 import placeholder from '../../../assets/placeholderImg/placeholder.jpeg'
-import { BookBodyData } from '../../../models/bookData.model'
 import { Author, AuthorPost } from '../../../models/author.model'
+import styles from './ManageBookForm.module.css'
+import { BookBodyData } from '../../../models/bookData.model'
 
 const ManageBookForm = () => {
   const [authors, setAuthors] = useState<Author[]>([])
-  const [isOpenForm, setIsOpenForm] = useState(false)
+  const [isAuthorFormOpen, setIsAuthorFormOpen] = useState(false)
   const [requestCover, setRequestCover] = useState<Blob>(new Blob())
   const [cover, setCover] = useState('')
   const [authorForm, setAuthorForm] = useState<AuthorPost>({
@@ -28,21 +28,27 @@ const ManageBookForm = () => {
     AuthorIds: [],
   })
 
+  useEffect(() => {
+    try {
+      fetchAuthorsData()
+    } catch (error) {
+      console.error(error)
+    }
+  }, [])
+
   const openFormhandler = () => {
-    setIsOpenForm(!isOpenForm)
+    setIsAuthorFormOpen(!isAuthorFormOpen)
   }
 
   const handleFileChange = ({ currentTarget }: FormEvent<HTMLInputElement>) => {
-    if (currentTarget.files) {
-      const files = currentTarget.files
-      const reader = new FileReader()
-      if (files) {
-        reader.readAsDataURL(files[0])
-        setRequestCover(files[0])
-        reader.onloadend = function () {
-          const base64data = reader.result
-          if (base64data) setCover(base64data as string)
-        }
+    const files = currentTarget.files
+    const reader = new FileReader()
+    if (files) {
+      reader.readAsDataURL(files[0])
+      setRequestCover(files[0])
+      reader.onloadend = function () {
+        const base64data = reader.result
+        if (base64data) setCover(base64data as string)
       }
     }
   }
@@ -51,14 +57,6 @@ const ManageBookForm = () => {
     getAuthors().then((response) => {
       setAuthors(response.data)
     })
-  }, [])
-
-  useEffect(() => {
-    try {
-      fetchAuthorsData()
-    } catch (error) {
-      if (error) console.error('nema autora')
-    }
   }, [])
 
   const addBookHandler = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -97,7 +95,6 @@ const ManageBookForm = () => {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         console.error('neautorizovan')
       }
-      return
     }
   }
 
@@ -113,7 +110,6 @@ const ManageBookForm = () => {
             <div className={styles['form-group']}>
               <label htmlFor='title'>Set Title</label>
               <input
-                type='text'
                 id='title'
                 name='title'
                 defaultValue={formData.Title}
@@ -134,7 +130,6 @@ const ManageBookForm = () => {
               <input
                 id='isbn'
                 name='isbn'
-                type='text'
                 defaultValue={formData.Isbn}
                 onChange={(e) => setFormData((prev) => ({ ...prev, Isbn: e.target.value }))}
               />
@@ -175,7 +170,7 @@ const ManageBookForm = () => {
                 isMulti
                 getOptionValue={(option: Author) => option.Id.toString()}
               />
-              {!isOpenForm && (
+              {!isAuthorFormOpen && (
                 <button onClick={openFormhandler} className={styles['add-btn']}>
                   Add New Author
                 </button>
@@ -183,17 +178,16 @@ const ManageBookForm = () => {
             </div>
           </div>
         </div>
-        {!isOpenForm && <button className={styles['form-submit-btn']}>Submit Book</button>}
+        {!isAuthorFormOpen && <button className={styles['form-submit-btn']}>Submit Book</button>}
       </form>
-      {isOpenForm && (
+      {isAuthorFormOpen && (
         <form onSubmit={addAuthorHandler} className={styles['add-author-form']}>
-          <button onClick={() => setIsOpenForm(false)} type='button'>
+          <button onClick={() => setIsAuthorFormOpen(false)} type='button'>
             x
           </button>
           <h2>Add New Author</h2>
           <div className={styles['form-group']}>
             <input
-              type='text'
               name='FirstName'
               onChange={(e) => setAuthorForm((prev) => ({ ...prev, FirstName: e.target.value }))}
               placeholder='first name'
@@ -201,7 +195,6 @@ const ManageBookForm = () => {
           </div>
           <div className={styles['form-group']}>
             <input
-              type='text'
               name='LastName'
               onChange={(e) => setAuthorForm((prev) => ({ ...prev, LastName: e.target.value }))}
               placeholder='last name'

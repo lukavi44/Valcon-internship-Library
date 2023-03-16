@@ -6,6 +6,7 @@ import imgPlaceholder from '../../../assets/placeholderImg/placeholder.jpeg'
 import Modal from '../../Layout/Modal'
 import { removeBookRequest } from '../../../services/BooksServices'
 import EditBookForm from '../BooksList/EditBookForm'
+import { useNavigate } from 'react-router-dom'
 
 export interface BookProps {
   Book: BookBodyDataGet
@@ -14,9 +15,8 @@ export interface BookProps {
 
 const BooksItem = ({ Book, isLoggedIn }: BookProps) => {
   const [isModalOpened, setIsModalOpened] = useState(false)
-
   const [coverPlaceholder, setCoverPlaceholder] = useState('')
-
+  const navigate = useNavigate()
   useEffect(() => {
     setCoverPlaceholder(imgPlaceholder)
   }, [])
@@ -24,7 +24,7 @@ const BooksItem = ({ Book, isLoggedIn }: BookProps) => {
   return (
     <Card>
       <div className={styles['book-holder']}>
-        <div className={styles['img-holder']}>
+        <div className={styles['img-holder']} onClick={() => navigate(`/BookDetails/${Book.Id}`)}>
           <img
             src={Book.Cover ? `data:image/png;base64, ${Book.Cover}` : coverPlaceholder}
             alt=''

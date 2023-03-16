@@ -25,6 +25,7 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
     Title: book.Title,
     Description: book.Description,
     Isbn: book.Isbn,
+    Available: book.Available,
     Quantity: book.Quantity,
     Cover: book.Cover,
     PublishDate: book.PublishDate,
@@ -36,16 +37,14 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
   }
 
   const handleFileChange = ({ currentTarget }: FormEvent<HTMLInputElement>) => {
-    if (currentTarget.files) {
-      const files = currentTarget.files
-      const reader = new FileReader()
-      if (files) {
-        reader.readAsDataURL(files[0])
-        setRequestCover(files[0])
-        reader.onloadend = function () {
-          const base64data = reader.result
-          if (base64data) setCover(base64data as string)
-        }
+    const files = currentTarget.files
+    const reader = new FileReader()
+    if (files) {
+      reader.readAsDataURL(files[0])
+      setRequestCover(files[0])
+      reader.onloadend = function () {
+        const base64data = reader.result
+        if (base64data) setCover(base64data as string)
       }
     }
   }

@@ -19,6 +19,7 @@ export interface BookBodyData {
 export interface BookBodyDataGet {
   Id: number
   Title: string
+  Available: number
   Description: string
   Isbn: string
   Quantity: number
