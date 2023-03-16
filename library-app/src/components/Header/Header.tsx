@@ -1,13 +1,14 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react'
 import search from '../../assets/icons/search.png'
 import styles from './Header.module.css'
 import sort from '../../assets/icons/sort.png'
 import { NavLink } from 'react-router-dom'
 import { deleteLocalStorage } from '../../helpers/manageLocalStorage'
 import Where from '../../models/where.model'
+import Search from '../Search/Search'
+import debounce from 'lodash.debounce'
 
 interface HeaderProps {
-  searchTermValue: string
   setSearchTermValue: Dispatch<SetStateAction<string>>
   isLoggedIn: boolean
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>
@@ -15,17 +16,9 @@ interface HeaderProps {
   setSort: Dispatch<SetStateAction<string[]>>
 }
 
-const Header = ({
-  searchTermValue,
-  setSearchTermValue,
-  isLoggedIn,
-  setIsLoggedIn,
-  setFilter,
-  setSort,
-}: HeaderProps) => {
+const Header = ({ setSearchTermValue, isLoggedIn, setIsLoggedIn }: HeaderProps) => {
   const [position, setPosition] = useState(window.scrollY)
   const [isVisible, setIsVisible] = useState(true)
-  const currentPathName = window.location.pathname
 
   const handleLogout = () => {
     deleteLocalStorage()
@@ -44,10 +37,6 @@ const Header = ({
     return () => window.removeEventListener('scroll', handleScroll)
   }, [position, isVisible])
 
-  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setSearchTermValue(event.target.value)
-  }
-
   return (
     <React.Fragment>
       <header
@@ -56,20 +45,7 @@ const Header = ({
       >
         {isLoggedIn && (
           <div className={styles['header-left']}>
-            <button className={styles['search-btn']}>
-              <img src={search} alt='' className={styles['search-img']} />
-            </button>
-            <input
-              type='search'
-              name='search'
-              id='search'
-              className={styles.input}
-              value={searchTermValue}
-              onChange={handleInputChange}
-            />
-            <button className={styles.sort}>
-              <img src={sort} alt='' />
-            </button>
+            <Search setSearchTermValue={setSearchTermValue} />
           </div>
         )}
         <NavLink to='login'>
