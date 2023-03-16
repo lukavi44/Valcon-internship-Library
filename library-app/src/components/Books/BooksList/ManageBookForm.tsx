@@ -5,12 +5,8 @@ import styles from './ManageBookForm.module.css'
 import Select, { MultiValue } from 'react-select'
 import { getAuthors, postAuthor } from '../../../services/AuthorServices'
 import placeholder from '../../../assets/placeholderImg/placeholder.jpeg'
-import { BookBodyData, BookBodyDataGet } from '../../../models/bookData.model'
+import { BookBodyData } from '../../../models/bookData.model'
 import { Author, AuthorPost } from '../../../models/author.model'
-
-interface FormProps {
-  book: BookBodyDataGet
-}
 
 const ManageBookForm = () => {
   const [authors, setAuthors] = useState<Author[]>([])
@@ -61,7 +57,7 @@ const ManageBookForm = () => {
     try {
       fetchAuthorsData()
     } catch (error) {
-      if (error) console.log('nema autora')
+      if (error) console.error('nema autora')
     }
   }, [])
 
@@ -80,9 +76,8 @@ const ManageBookForm = () => {
       await postBookRequest(form)
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        console.log('neautorizovan')
+        console.error('neautorizovan')
       }
-      return
     }
   }
 
@@ -98,10 +93,9 @@ const ManageBookForm = () => {
       form.append('FirstName', authorForm.FirstName)
       form.append('LastName', authorForm.LastName)
       postAuthor(form)
-      console.log('autor dodat', form)
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        console.log('neautorizovan')
+        console.error('neautorizovan')
       }
       return
     }

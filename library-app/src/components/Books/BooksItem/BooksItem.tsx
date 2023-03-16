@@ -4,15 +4,15 @@ import styles from './BooksItem.module.css'
 import { useEffect, useState } from 'react'
 import imgPlaceholder from '../../../assets/placeholderImg/placeholder.jpeg'
 import Modal from '../../Layout/Modal'
-import ManageBookForm from '../BooksList/ManageBookForm'
 import { removeBookRequest } from '../../../services/BooksServices'
 import EditBookForm from '../BooksList/EditBookForm'
 
 export interface BookProps {
   Book: BookBodyDataGet
+  isLoggedIn: boolean
 }
 
-const BooksItem = ({ Book }: BookProps) => {
+const BooksItem = ({ Book, isLoggedIn }: BookProps) => {
   const [isModalOpened, setIsModalOpened] = useState(false)
 
   const [coverPlaceholder, setCoverPlaceholder] = useState('')
@@ -50,30 +50,32 @@ const BooksItem = ({ Book }: BookProps) => {
             ))}
         </div>
       </div>
-      <div className={styles['actions-btn-holder']}>
-        <button
-          className={styles['action-btn']}
-          id={styles.edit}
-          onClick={() => setIsModalOpened(true)}
-        >
-          Edit
-        </button>
-        {isModalOpened && (
-          <Modal onClose={() => setIsModalOpened(false)}>
-            <EditBookForm book={Book} />
-          </Modal>
-        )}
-        <button
-          className={styles['action-btn']}
-          id={styles.delete}
-          onClick={() => removeBookRequest(Book.Id)}
-        >
-          Delete
-        </button>
-        <button className={styles['action-btn']} id={styles.rent}>
-          Rent
-        </button>
-      </div>
+      {isLoggedIn && (
+        <div className={styles['actions-btn-holder']}>
+          <button
+            className={styles['action-btn']}
+            id={styles.edit}
+            onClick={() => setIsModalOpened(true)}
+          >
+            Edit
+          </button>
+          {isModalOpened && (
+            <Modal onClose={() => setIsModalOpened(false)}>
+              <EditBookForm book={Book} />
+            </Modal>
+          )}
+          <button
+            className={styles['action-btn']}
+            id={styles.delete}
+            onClick={() => removeBookRequest(Book.Id)}
+          >
+            Delete
+          </button>
+          <button className={styles['action-btn']} id={styles.rent}>
+            Rent
+          </button>
+        </div>
+      )}
     </Card>
   )
 }

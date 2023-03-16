@@ -2,11 +2,10 @@ import axios from 'axios'
 import { FormEvent, useCallback, useEffect, useState } from 'react'
 import Select, { MultiValue } from 'react-select'
 import { Author, AuthorPost } from '../../../models/author.model'
-import { BookBodyData, BookBodyDataGet } from '../../../models/bookData.model'
+import { BookBodyDataGet } from '../../../models/bookData.model'
 import { getAuthors, postAuthor } from '../../../services/AuthorServices'
-import { postBookRequest } from '../../../services/BooksServices'
+import { putBookRequest } from '../../../services/BooksServices'
 import styles from './ManageBookForm.module.css'
-import placeholder from '../../../assets/placeholderImg/placeholder.jpeg'
 
 interface EditBookFormProps {
   book: BookBodyDataGet
@@ -61,7 +60,7 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
     try {
       fetchAuthorsData()
     } catch (error) {
-      if (error) console.log('nema autora')
+      if (error) console.error('nema autora')
     }
   }, [])
 
@@ -69,6 +68,7 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
     event.preventDefault()
     try {
       const form = new FormData()
+      form.append('Id', book.Id.toString())
       form.append('Cover', requestCover)
       form.append('Description', formData.Description)
       form.append('Isbn', formData.Isbn)
@@ -77,10 +77,10 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
       form.append('Title', formData.Title)
       formData.Authors.forEach((author) => form.append('Authors', author.Id.toString()))
 
-      await postBookRequest(form)
+      await putBookRequest(form)
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        console.log('neautorizovan')
+        console.error('neautorizovan')
       }
       return
     }
@@ -98,12 +98,10 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
       form.append('FirstName', authorForm.FirstName)
       form.append('LastName', authorForm.LastName)
       postAuthor(form)
-      console.log('autor dodat', form)
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        console.log('neautorizovan')
+        console.error('neautorizovan')
       }
-      return
     }
   }
 
@@ -113,8 +111,8 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
         <div className={styles['form-group-column']}>
           <img
             className={styles['upload-img']}
-            src={book.Cover ? `data:image/png;base64, ${book.Cover}` : placeholder}
-            alt=''
+            src={book.Cover ? `data:image/png;base64, ${book.Cover}` : cover}
+            alt='Book Cover'
           />
           <input id='cover' name='cover' type='file' onChange={handleFileChange} />
         </div>
