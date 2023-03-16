@@ -1,7 +1,7 @@
 import { BookResponse } from '../../../models/bookData.model'
 import Card from '../../UI/Card'
 import styles from './BooksItem.module.css'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import imgPlaceholder from '../../../assets/placeholderImg/placeholder.jpeg'
 import Modal from '../../Layout/Modal'
 import { removeBookRequest } from '../../../services/BooksServices'
@@ -14,19 +14,14 @@ export interface BookProps {
 
 const BooksItem = ({ Book, isLoggedIn }: BookProps) => {
   const [isModalOpened, setIsModalOpened] = useState(false)
-  const [coverPlaceholder, setCoverPlaceholder] = useState('')
-
-  useEffect(() => {
-    setCoverPlaceholder(imgPlaceholder)
-  }, [])
 
   return (
     <Card>
       <div className={styles['book-holder']}>
         <div className={styles['img-holder']}>
           <img
-            src={Book.Cover ? `data:image/png;base64, ${Book.Cover}` : coverPlaceholder}
-            alt=''
+            src={Book.Cover ? `data:image/png;base64, ${Book.Cover}` : imgPlaceholder}
+            alt='Book cover'
             className={styles['book-img']}
           />
         </div>

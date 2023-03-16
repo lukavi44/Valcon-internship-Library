@@ -1,6 +1,6 @@
-import axios from 'axios'
 import { FormEvent, useCallback, useEffect, useState } from 'react'
 import Select, { MultiValue } from 'react-select'
+import axios from 'axios'
 import { Author, AuthorPost } from '../../../models/author.model'
 import { BookResponse } from '../../../models/bookData.model'
 import { getAuthors, postAuthor } from '../../../services/AuthorServices'
@@ -192,9 +192,7 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
       </form>
       {isAuthorFormOpen && (
         <form onSubmit={addAuthorHandler} className={styles['add-author-form']}>
-          <button onClick={() => setIsAuthorFormOpen(false)} type='button'>
-            x
-          </button>
+          <button onClick={() => setIsAuthorFormOpen(false)}>x</button>
           <h2>Add New Author</h2>
           <div className={styles['form-group']}>
             <input
