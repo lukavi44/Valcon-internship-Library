@@ -4,6 +4,7 @@ import { BookBodyDataGet } from '../../../models/bookData.model'
 import Where from '../../../models/where.model'
 import { getBooksRequest } from '../../../services/BooksServices'
 import BooksList from '../../Books/BooksList/BooksList'
+import styles from './Homepage.module.css'
 
 interface HomepageProps {
   search: string
@@ -11,16 +12,14 @@ interface HomepageProps {
   sort: string[]
   books: BookBodyDataGet[]
   setBooks: Dispatch<SetStateAction<BookBodyDataGet[]>>
+  isLoggedIn: boolean
 }
 
-const Homepage = ({ books, setBooks, search, filter, sort }: HomepageProps) => {
+const Homepage = ({ books, setBooks, search, filter, sort, isLoggedIn }: HomepageProps) => {
   const [pageNumber, setPageNumber] = useState(1)
-  // const [books, setBooks] = useState<BookBodyDataGet[]>([])
   const [hasMoreBooks, setHasMoreBooks] = useState(true)
-  const pageLength = 12
+  const pageLength = 9
   const currentSearch = useRef<string>(search)
-  const currentFilter = useRef<Where[]>(filter)
-  const currentSort = useRef<string[]>(sort)
 
   const fetchBooks = (
     pageNumber: number,
@@ -46,36 +45,44 @@ const Homepage = ({ books, setBooks, search, filter, sort }: HomepageProps) => {
     setPageNumber(1)
   }
   useEffect(() => {
-    console.log(hasMoreBooks, 'homepage log')
     if (currentSearch.current !== search) {
       currentSearch.current = search
       resetPaging()
-    } else if (currentFilter.current !== filter) {
-      resetPaging()
-      currentFilter.current = filter
-    } else if (currentSort.current !== sort) {
-      resetPaging()
-      currentSort.current = sort
     }
     fetchBooks(pageNumber, pageLength, search, filter, sort)
-  }, [pageNumber, filter, sort])
+  }, [pageNumber, search])
 
   const handleNextPage = () => {
     setPageNumber((prevPageNumber) => prevPageNumber + 1)
   }
 
   return (
-    <div id='homepage' style={{ height: '100%', overflowY: 'scroll' }}>
+    <div id='homepage' className={styles.homepage}>
       {books.length > 0 ? (
         <InfiniteScroll
           dataLength={books.length}
           next={handleNextPage}
           hasMore={hasMoreBooks}
-          loader={<h4 style={{ textAlign: 'center' }}>Loading...</h4>}
+          loader={
+            <div className={styles['lds-spinner']}>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          }
           endMessage={<h4 style={{ textAlign: 'center' }}>You have browsed all books</h4>}
           scrollableTarget='homepage'
         >
-          <BooksList booksProps={books} />
+          <BooksList isLoggedIn={isLoggedIn} booksProps={books} />
         </InfiniteScroll>
       ) : (
         <h3 style={{ textAlign: 'center' }}>No books currently available</h3>

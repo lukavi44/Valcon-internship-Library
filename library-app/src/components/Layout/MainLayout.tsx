@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { BookBodyDataGet } from '../../models/bookData.model'
 import Where from '../../models/where.model'
@@ -19,14 +19,17 @@ const MainLayout = () => {
   const [filter, setFilter] = useState<Where[]>([])
   const [sort, setSort] = useState<string[]>([])
 
+  useEffect(() => {
+    if (accessToken !== '') {
+      setIsLoggedIn(true)
+    }
+  }, [])
+
   return (
     <div className={styles.wrapp}>
       <Sidebar isLoggedIn={isLoggedIn} />
       <div className={styles['inside-wrapp']}>
-        <div className={styles.bckgrnd}></div>
-
         <Header
-          searchTermValue={searchTermValue}
           setSearchTermValue={setSearchTermValue}
           isLoggedIn={isLoggedIn}
           setIsLoggedIn={setIsLoggedIn}
@@ -47,6 +50,7 @@ const MainLayout = () => {
                 search={searchTermValue}
                 filter={filter}
                 sort={sort}
+                isLoggedIn={isLoggedIn}
               />
             }
           />
