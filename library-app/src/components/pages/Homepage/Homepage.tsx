@@ -85,7 +85,20 @@ const Homepage = ({ books, setBooks, search, filter, sort, isLoggedIn }: Homepag
           <BooksList isLoggedIn={isLoggedIn} booksProps={books} />
         </InfiniteScroll>
       ) : (
-        <h3 style={{ textAlign: 'center' }}>No books currently available</h3>
+        <div className={styles['lds-spinner']}>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       )}
     </div>
   )
