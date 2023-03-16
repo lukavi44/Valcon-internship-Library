@@ -47,7 +47,7 @@ const Login = ({ setIsLoggedIn, setAccessToken }: Props) => {
     setEnteredPassword(currentTarget.value.trim())
   }
 
-  const formSubmissionHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+  const formSubmissionHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (!getIsFormValid()) {
       setEnteredEmailIsValid(getIsFieldValid(enteredEmail))
@@ -59,11 +59,11 @@ const Login = ({ setIsLoggedIn, setAccessToken }: Props) => {
       password: enteredPassword,
     }
 
-    await LoginRequest(formData)
+    LoginRequest(formData)
       .then(({ data }) => {
-        setLocalStorage(data)
         setIsLoggedIn(true)
         setAccessToken(data.AccessToken)
+        setLocalStorage(data)
         navigateTo('/')
       })
       .catch((error) => {

@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { BookBodyData, BookItemList } from '../models/bookData.model'
+import { BookRequest, BookItemList } from '../models/bookData.model'
 import Where from '../models/where.model'
 import axiosInstance from './axiosConfig'
 
@@ -34,11 +34,11 @@ const convertParamsToQueryString = ({ pageNumber, pageLength, search, filter }: 
 }
 
 export const postBookRequest = (body: FormData): Promise<AxiosResponse> => {
-  return axiosInstance.post<BookBodyData>('api/Books', body)
+  return axiosInstance.post<BookRequest>('api/Books', body)
 }
 
 export const putBookRequest = (body: FormData): Promise<AxiosResponse> => {
-  return axiosInstance.put<BookBodyData>('api/Books', body)
+  return axiosInstance.put<BookRequest>('api/Books', body)
 }
 
 export const getBooksRequest = ({

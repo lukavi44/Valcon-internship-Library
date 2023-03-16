@@ -5,7 +5,7 @@ import styles from './ManageBookForm.module.css'
 import Select, { MultiValue } from 'react-select'
 import { getAuthors, postAuthor } from '../../../services/AuthorServices'
 import placeholder from '../../../assets/placeholderImg/placeholder.jpeg'
-import { BookBodyData } from '../../../models/bookData.model'
+import { BookRequest } from '../../../models/bookData.model'
 import { Author, AuthorPost } from '../../../models/author.model'
 
 const ManageBookForm = () => {
@@ -17,7 +17,7 @@ const ManageBookForm = () => {
     FirstName: '',
     LastName: '',
   })
-  const [formData, setFormData] = useState<BookBodyData>({
+  const [formData, setFormData] = useState<BookRequest>({
     Id: 0,
     Title: '',
     Description: '',

@@ -2,13 +2,13 @@ import axios from 'axios'
 import { FormEvent, useCallback, useEffect, useState } from 'react'
 import Select, { MultiValue } from 'react-select'
 import { Author, AuthorPost } from '../../../models/author.model'
-import { BookBodyDataGet } from '../../../models/bookData.model'
+import { BookResponse } from '../../../models/bookData.model'
 import { getAuthors, postAuthor } from '../../../services/AuthorServices'
 import { putBookRequest } from '../../../services/BooksServices'
 import styles from './ManageBookForm.module.css'
 
 interface EditBookFormProps {
-  book: BookBodyDataGet
+  book: BookResponse
 }
 
 const EditBookForm = ({ book }: EditBookFormProps) => {
@@ -20,7 +20,7 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
     FirstName: '',
     LastName: '',
   })
-  const [formData, setFormData] = useState<BookBodyDataGet>({
+  const [formData, setFormData] = useState<BookResponse>({
     Id: book.Id,
     Title: book.Title,
     Description: book.Description,

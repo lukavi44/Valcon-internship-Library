@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { BookBodyDataGet } from '../../../models/bookData.model'
+import { BookResponse } from '../../../models/bookData.model'
 import Where from '../../../models/where.model'
 import { getBooksRequest } from '../../../services/BooksServices'
 import BooksList from '../../Books/BooksList/BooksList'
@@ -10,8 +10,8 @@ interface HomepageProps {
   search: string
   filter: Where[]
   sort: string[]
-  books: BookBodyDataGet[]
-  setBooks: Dispatch<SetStateAction<BookBodyDataGet[]>>
+  books: BookResponse[]
+  setBooks: Dispatch<SetStateAction<BookResponse[]>>
   isLoggedIn: boolean
 }
 
@@ -20,6 +20,14 @@ const Homepage = ({ books, setBooks, search, filter, sort, isLoggedIn }: Homepag
   const [hasMoreBooks, setHasMoreBooks] = useState(true)
   const pageLength = 9
   const currentSearch = useRef<string>(search)
+
+  useEffect(() => {
+    if (currentSearch.current !== search) {
+      currentSearch.current = search
+      resetPaging()
+    }
+    fetchBooks(pageNumber, pageLength, search, filter, sort)
+  }, [pageNumber, search])
 
   const fetchBooks = (
     pageNumber: number,
@@ -44,13 +52,6 @@ const Homepage = ({ books, setBooks, search, filter, sort, isLoggedIn }: Homepag
     setBooks([])
     setPageNumber(1)
   }
-  useEffect(() => {
-    if (currentSearch.current !== search) {
-      currentSearch.current = search
-      resetPaging()
-    }
-    fetchBooks(pageNumber, pageLength, search, filter, sort)
-  }, [pageNumber, search])
 
   const handleNextPage = () => {
     setPageNumber((prevPageNumber) => prevPageNumber + 1)

@@ -1,4 +1,4 @@
-import { BookBodyDataGet } from '../../../models/bookData.model'
+import { BookResponse } from '../../../models/bookData.model'
 import Card from '../../UI/Card'
 import styles from './BooksItem.module.css'
 import { useEffect, useState } from 'react'
@@ -8,7 +8,7 @@ import { removeBookRequest } from '../../../services/BooksServices'
 import EditBookForm from '../BooksList/EditBookForm'
 
 export interface BookProps {
-  Book: BookBodyDataGet
+  Book: BookResponse
   isLoggedIn: boolean
 }
 

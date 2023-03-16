@@ -1,9 +1,9 @@
 import BooksItem from '../BooksItem/BooksItem'
 import styles from './BooksList.module.css'
-import { BookBodyDataGet } from '../../../models/bookData.model'
+import { BookResponse } from '../../../models/bookData.model'
 
 interface BookListProps {
-  booksProps: BookBodyDataGet[]
+  booksProps: BookResponse[]
   isLoggedIn: boolean
 }
 
