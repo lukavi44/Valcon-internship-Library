@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styles from './Sidebar.module.css'
 import home from '../../assets/icons/home.png'
-import account from '../../assets/icons/account.png' // loader comp za slike
+import account from '../../assets/icons/account.png'
 import showMore from '../../assets/icons/showMore.png'
 import { useNavigate } from 'react-router-dom'
 import Modal from '../Layout/Modal'

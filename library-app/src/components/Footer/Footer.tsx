@@ -60,11 +60,7 @@ export const Footer = ({ isLoggedIn }: FooterProps) => {
             </button>
           </div>
           <div className={styles['btn-holder']}>
-            <button
-              className={styles['add-new-book']}
-              type='submit'
-              onClick={() => setIsOpen(true)}
-            >
+            <button className={styles['add-new-book']} onClick={() => setIsOpen(true)}>
               Add New Book +
             </button>
           </div>
