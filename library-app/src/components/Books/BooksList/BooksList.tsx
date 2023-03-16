@@ -1,8 +1,6 @@
 import BooksItem from '../BooksItem/BooksItem'
 import styles from './BooksList.module.css'
-
 import { BookBodyDataGet } from '../../../models/bookData.model'
-import { useEffect } from 'react'
 
 interface BookListProps {
   booksProps: BookBodyDataGet[]
@@ -10,10 +8,6 @@ interface BookListProps {
 }
 
 const BooksList = ({ booksProps, isLoggedIn }: BookListProps) => {
-  useEffect(() => {
-    return
-  }, [booksProps])
-
   return (
     <div className={styles.wrapp}>
       <div className={styles['books-wrap']}>

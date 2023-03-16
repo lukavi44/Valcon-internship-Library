@@ -21,8 +21,8 @@ const createWhereSearch = (search: string) => {
 
 const convertParamsToQueryString = ({ pageNumber, pageLength, search, filter }: GetBooksProps) => {
   let result = '?'
-  result += 'PageNumber=' + pageNumber.toString()
-  result += '&PageLength=' + pageLength.toString()
+  result += `PageNumber=${pageNumber.toString()}`
+  result += `&PageLength=${pageLength.toString()}`
   const where: Where[] = [...filter]
   where.push(createWhereSearch(search))
   where.forEach((where) => {

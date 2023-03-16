@@ -13,7 +13,7 @@ interface FooterProps {
 
 export const Footer = ({ isLoggedIn }: FooterProps) => {
   const [adminOptions, setAdminOptions] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const navigateTo = useNavigate()
 
@@ -60,14 +60,14 @@ export const Footer = ({ isLoggedIn }: FooterProps) => {
             </button>
           </div>
           <div className={styles['btn-holder']}>
-            <button className={styles['add-new-book']} onClick={() => setIsOpen(true)}>
+            <button className={styles['add-new-book']} onClick={() => setIsModalOpen(true)}>
               Add New Book +
             </button>
           </div>
         </nav>
       )}
-      {isOpen && (
-        <Modal onClose={() => setIsOpen(false)}>
+      {isModalOpen && (
+        <Modal onClose={() => setIsModalOpen(false)}>
           <ManageBookForm />
         </Modal>
       )}
