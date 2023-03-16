@@ -20,17 +20,15 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  /* justify-content: center; */
+  background: repeating-linear-gradient(
+    to right,
+    #d9b99b 0px,
+    #eed9c4 20px,
+    #fff0db 20px,
+    #faf0e6 40px
+  );
 }
-.bckgrnd {
-  height: 55vh;
-  width: 100%;
-  background-color: #d9b97e;
-  position: fixed;
-  top: 0;
-  z-index: -1;
-  border-bottom-left-radius: 30%;
-}
+
 @media only screen and (min-width: 426px) {
   .wrapp {
     flex-direction: row;
