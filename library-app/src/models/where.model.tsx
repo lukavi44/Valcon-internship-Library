@@ -1,5 +1,5 @@
 export default interface Where {
-  field: string
-  value: string
-  operation: number
+  Field: string
+  Value: string
+  Operation: number
 }
