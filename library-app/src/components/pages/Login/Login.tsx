@@ -67,11 +67,8 @@ const Login = ({ setIsLoggedIn, setAccessToken }: Props) => {
         navigateTo('/')
       })
       .catch((error) => {
-        if (axios.isAxiosError(error)) {
-          if (error.response?.status === 401) {
-            setInvalidCredentials(true)
-            console.log('pogresni kredencijali')
-          }
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
+          setInvalidCredentials(true)
         }
       })
   }
