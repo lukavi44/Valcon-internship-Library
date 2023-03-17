@@ -7,6 +7,7 @@ import Modal from '../../Layout/Modal'
 import { removeBookRequest } from '../../../services/BooksServices'
 import EditBookForm from '../BooksList/EditBookForm'
 import { useNavigate } from 'react-router-dom'
+import { convertDateToString } from '../../../helpers/convertDate.helpers'
 
 export interface BookProps {
   Book: BookBodyDataGet
@@ -14,7 +15,6 @@ export interface BookProps {
 }
 
 const BooksItem = ({ Book, isLoggedIn }: BookProps) => {
-  const [isModalOpened, setIsModalOpened] = useState(false)
   const [coverPlaceholder, setCoverPlaceholder] = useState('')
   const navigate = useNavigate()
   useEffect(() => {
@@ -35,7 +35,7 @@ const BooksItem = ({ Book, isLoggedIn }: BookProps) => {
           <h2>{Book.Title}</h2>
           <div className={styles['published-date']}>
             <p>Published:</p>
-            <p>{Book.PublishDate}</p>
+            {Book.PublishDate ? <p>{convertDateToString(Book.PublishDate)}</p> : ''}
           </div>
           <p>
             {Book.Description?.substring(0, 50)}
@@ -50,32 +50,6 @@ const BooksItem = ({ Book, isLoggedIn }: BookProps) => {
             ))}
         </div>
       </div>
-      {isLoggedIn && (
-        <div className={styles['actions-btn-holder']}>
-          <button
-            className={styles['action-btn']}
-            id={styles.edit}
-            onClick={() => setIsModalOpened(true)}
-          >
-            Edit
-          </button>
-          {isModalOpened && (
-            <Modal onClose={() => setIsModalOpened(false)}>
-              <EditBookForm book={Book} />
-            </Modal>
-          )}
-          <button
-            className={styles['action-btn']}
-            id={styles.delete}
-            onClick={() => removeBookRequest(Book.Id)}
-          >
-            Delete
-          </button>
-          <button className={styles['action-btn']} id={styles.rent}>
-            Rent
-          </button>
-        </div>
-      )}
     </Card>
   )
 }
