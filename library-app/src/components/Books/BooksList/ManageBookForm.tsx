@@ -12,7 +12,7 @@ const ManageBookForm = () => {
   const [authors, setAuthors] = useState<Author[]>([])
   const [isAuthorFormOpen, setIsAuthorFormOpen] = useState(false)
   const [requestCover, setRequestCover] = useState<Blob>(new Blob())
-  const [cover, setCover] = useState('')
+  const [previewCover, setPreviewCover] = useState('')
   const [authorForm, setAuthorForm] = useState<AuthorPost>({
     FirstName: '',
     LastName: '',
@@ -48,7 +48,7 @@ const ManageBookForm = () => {
       setRequestCover(files[0])
       reader.onloadend = function () {
         const base64data = reader.result
-        if (base64data) setCover(base64data as string)
+        if (base64data) setPreviewCover(base64data as string)
       }
     }
   }
@@ -104,7 +104,7 @@ const ManageBookForm = () => {
         <div className={styles['form-group-column']}>
           <img
             className={styles['upload-img']}
-            src={cover ? cover : placeholder}
+            src={previewCover ? previewCover : placeholder}
             alt='Book Cover'
           />
           <input id='cover' name='cover' type='file' onChange={handleFileChange} />
