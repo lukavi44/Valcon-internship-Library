@@ -5,6 +5,7 @@
   justify-content: flex-start;
   overflow: scroll;
   gap: 2rem;
+  padding: 3rem;
 }
 .form-group {
   display: flex;

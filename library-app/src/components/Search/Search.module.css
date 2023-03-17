@@ -2,10 +2,11 @@
   padding: 1rem;
   padding-inline-start: 4rem;
   border-radius: 2rem;
-  width: 80%;
+  width: 40%;
+  transition: 1s;
 }
 .input:focus {
-  width: 100%;
+  width: 60%;
 }
 .search-wrapp {
   width: 50%;
@@ -29,12 +30,22 @@
   background-color: #e3d9c7;
   border: 2px solid #f6f6f6;
 }
-@media screen and (min-width: 426px) {
-  .input {
-    width: 40%;
-    transition: 2s;
+@media screen and (max-width: 426px) {
+  .search-wrapp {
+    width: unset;
   }
-  .input:focus {
-    width: 70%;
+
+  .input {
+    transition: none;
+    width: auto;
+    padding-inline-start: 0;
+  }
+
+  .sort {
+    margin-left: 10px;
+  }
+
+  .sort img {
+    height: 30px;
   }
 }

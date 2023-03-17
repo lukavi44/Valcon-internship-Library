@@ -5,7 +5,8 @@
   border-radius: 5%;
   margin: auto;
   background: white;
-  gap: 3rem;
+  gap: 5rem;
+  max-width: 70%;
 }
 
 img {
@@ -16,7 +17,8 @@ img {
 .container-left {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  justify-content: space-evenly;
+  width: 25%;
 }
 
 .container-right {
@@ -35,16 +37,59 @@ img {
   padding: 1rem 3rem;
 }
 
-.quantity {
+.available {
   padding: 1rem;
   display: flex;
   justify-content: space-around;
   background: green;
 }
 
-.quantity-zero {
+.available-zero {
   padding: 1rem;
   display: flex;
   justify-content: space-around;
   background: red;
+}
+
+.book-quantity {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.book-quantity-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #d9b99b;
+  border-radius: 50%;
+  width: 15%;
+  padding: 1rem;
+}
+
+.about-book {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media screen and (max-width: 426px) {
+  .container {
+    max-width: none;
+    gap: 1rem;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 0;
+  }
+
+  .container-left {
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .actions-btn-holder {
+    width: 100%;
+    gap: 5px;
+  }
 }
