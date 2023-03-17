@@ -166,7 +166,6 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
                 onChange={(e) => setFormData((prev) => ({ ...prev, PublishDate: e.target.value }))}
               />
             </div>
-
             <div className={styles['form-group']}>
               <label htmlFor='authorIds'>Author(s)</label>
               <Select

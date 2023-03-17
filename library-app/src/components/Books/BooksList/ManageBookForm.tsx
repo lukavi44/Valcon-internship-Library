@@ -102,7 +102,11 @@ const ManageBookForm = () => {
     <>
       <form className={styles['form-wrapper']} onSubmit={addBookHandler}>
         <div className={styles['form-group-column']}>
-          <img className={styles['upload-img']} src={cover ? cover : placeholder} alt='' />
+          <img
+            className={styles['upload-img']}
+            src={cover ? cover : placeholder}
+            alt='Book Cover'
+          />
           <input id='cover' name='cover' type='file' onChange={handleFileChange} />
         </div>
         <div className={styles.bottom}>
