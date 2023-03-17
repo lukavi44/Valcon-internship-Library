@@ -7,6 +7,7 @@ import { getAuthors, postAuthor } from '../../../services/AuthorServices'
 import { putBookRequest } from '../../../services/BooksServices'
 import styles from './ManageBookForm.module.css'
 
+
 interface EditBookFormProps {
   book: BookBodyDataGet
 }
@@ -31,7 +32,15 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
     PublishDate: book.PublishDate,
     Authors: book.Authors,
   })
-
+  
+  useEffect(() => {
+    try {
+      fetchAuthorsData()
+    } catch (error) {
+      if (error) console.error('nema autora')
+    }
+  }, [cover])
+  
   const openFormhandler = () => {
     setIsOpenForm(!isOpenForm)
   }
@@ -53,14 +62,6 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
     getAuthors().then((response) => {
       setAuthors(response.data)
     })
-  }, [])
-
-  useEffect(() => {
-    try {
-      fetchAuthorsData()
-    } catch (error) {
-      if (error) console.error('nema autora')
-    }
   }, [])
 
   const editBookHandler = async (event: React.FormEvent<HTMLFormElement>) => {
