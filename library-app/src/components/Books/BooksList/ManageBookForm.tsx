@@ -3,21 +3,21 @@ import Select, { MultiValue } from 'react-select'
 import axios from 'axios'
 import { postBookRequest } from '../../../services/BooksServices'
 import { getAuthors, postAuthor } from '../../../services/AuthorServices'
-import placeholder from '../../../assets/placeholderImg/placeholder.jpeg'
 import { Author, AuthorPost } from '../../../models/author.model'
+import { BookRequest } from '../../../models/bookData.model'
+import placeholder from '../../../assets/placeholderImg/placeholder.jpeg'
 import styles from './ManageBookForm.module.css'
-import { BookBodyData } from '../../../models/bookData.model'
 
 const ManageBookForm = () => {
   const [authors, setAuthors] = useState<Author[]>([])
   const [isAuthorFormOpen, setIsAuthorFormOpen] = useState(false)
   const [requestCover, setRequestCover] = useState<Blob>(new Blob())
-  const [cover, setCover] = useState('')
+  const [previewCover, setPreviewCover] = useState('')
   const [authorForm, setAuthorForm] = useState<AuthorPost>({
     FirstName: '',
     LastName: '',
   })
-  const [formData, setFormData] = useState<BookBodyData>({
+  const [formData, setFormData] = useState<BookRequest>({
     Id: 0,
     Title: '',
     Description: '',
@@ -48,7 +48,7 @@ const ManageBookForm = () => {
       setRequestCover(files[0])
       reader.onloadend = function () {
         const base64data = reader.result
-        if (base64data) setCover(base64data as string)
+        if (base64data) setPreviewCover(base64data as string)
       }
     }
   }
@@ -102,7 +102,11 @@ const ManageBookForm = () => {
     <>
       <form className={styles['form-wrapper']} onSubmit={addBookHandler}>
         <div className={styles['form-group-column']}>
-          <img className={styles['upload-img']} src={cover ? cover : placeholder} alt='' />
+          <img
+            className={styles['upload-img']}
+            src={previewCover ? previewCover : placeholder}
+            alt='Book Cover'
+          />
           <input id='cover' name='cover' type='file' onChange={handleFileChange} />
         </div>
         <div className={styles.bottom}>

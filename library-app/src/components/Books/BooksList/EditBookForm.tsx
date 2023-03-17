@@ -1,27 +1,26 @@
-import axios from 'axios'
 import { FormEvent, useCallback, useEffect, useState } from 'react'
 import Select, { MultiValue } from 'react-select'
+import axios from 'axios'
 import { Author, AuthorPost } from '../../../models/author.model'
-import { BookBodyDataGet } from '../../../models/bookData.model'
+import { BookResponse } from '../../../models/bookData.model'
 import { getAuthors, postAuthor } from '../../../services/AuthorServices'
 import { putBookRequest } from '../../../services/BooksServices'
 import styles from './ManageBookForm.module.css'
 
-
 interface EditBookFormProps {
-  book: BookBodyDataGet
+  book: BookResponse
 }
 
 const EditBookForm = ({ book }: EditBookFormProps) => {
   const [authors, setAuthors] = useState<Author[]>([])
-  const [isOpenForm, setIsOpenForm] = useState(false)
+  const [isAuthorFormOpen, setIsAuthorFormOpen] = useState(false)
   const [requestCover, setRequestCover] = useState<Blob>(new Blob())
   const [cover, setCover] = useState('')
   const [authorForm, setAuthorForm] = useState<AuthorPost>({
     FirstName: '',
     LastName: '',
   })
-  const [formData, setFormData] = useState<BookBodyDataGet>({
+  const [formData, setFormData] = useState<BookResponse>({
     Id: book.Id,
     Title: book.Title,
     Description: book.Description,
@@ -32,17 +31,17 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
     PublishDate: book.PublishDate,
     Authors: book.Authors,
   })
-  
+
   useEffect(() => {
     try {
       fetchAuthorsData()
     } catch (error) {
-      if (error) console.error('nema autora')
+       console.error('nema autora', error)
     }
   }, [cover])
   
   const openFormhandler = () => {
-    setIsOpenForm(!isOpenForm)
+    setIsAuthorFormOpen(!isAuthorFormOpen)
   }
 
   const handleFileChange = ({ currentTarget }: FormEvent<HTMLInputElement>) => {
@@ -82,7 +81,6 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         console.error('neautorizovan')
       }
-      return
     }
   }
 
@@ -169,7 +167,6 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
                 onChange={(e) => setFormData((prev) => ({ ...prev, PublishDate: e.target.value }))}
               />
             </div>
-
             <div className={styles['form-group']}>
               <label htmlFor='authorIds'>Author(s)</label>
               <Select
@@ -183,7 +180,7 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
                 isMulti
                 getOptionValue={(option: Author) => option.Id.toString()}
               />
-              {!isOpenForm && (
+              {!isAuthorFormOpen && (
                 <button onClick={openFormhandler} className={styles['add-btn']}>
                   Add New Author
                 </button>
@@ -191,13 +188,11 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
             </div>
           </div>
         </div>
-        {!isOpenForm && <button className={styles['form-submit-btn']}>Submit Book</button>}
+        {!isAuthorFormOpen && <button className={styles['form-submit-btn']}>Submit Book</button>}
       </form>
-      {isOpenForm && (
+      {isAuthorFormOpen && (
         <form onSubmit={addAuthorHandler} className={styles['add-author-form']}>
-          <button onClick={() => setIsOpenForm(false)} type='button'>
-            x
-          </button>
+          <button onClick={() => setIsAuthorFormOpen(false)}>x</button>
           <h2>Add New Author</h2>
           <div className={styles['form-group']}>
             <input

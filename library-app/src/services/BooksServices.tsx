@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { BookBodyData, BookBodyDataGet, BookItemList } from '../models/bookData.model'
+import { BookRequest, BookItemList, BookResponse } from '../models/bookData.model'
 import Where from '../models/where.model'
 import axiosInstance from './axiosConfig'
 
@@ -21,8 +21,8 @@ const createWhereSearch = (search: string) => {
 
 const convertParamsToQueryString = ({ pageNumber, pageLength, search, filter }: GetBooksProps) => {
   let result = '?'
-  result += 'PageNumber=' + pageNumber.toString()
-  result += '&PageLength=' + pageLength.toString()
+  result += `PageNumber=${pageNumber.toString()}`
+  result += `&PageLength=${pageLength.toString()}`
   const where: Where[] = [...filter]
   where.push(createWhereSearch(search))
   where.forEach((where) => {
@@ -34,11 +34,11 @@ const convertParamsToQueryString = ({ pageNumber, pageLength, search, filter }: 
 }
 
 export const postBookRequest = (body: FormData): Promise<AxiosResponse> => {
-  return axiosInstance.post<BookBodyData>('api/Books', body)
+  return axiosInstance.post<BookRequest>('api/Books', body)
 }
 
 export const putBookRequest = (body: FormData): Promise<AxiosResponse> => {
-  return axiosInstance.put<BookBodyData>('api/Books', body)
+  return axiosInstance.put<BookRequest>('api/Books', body)
 }
 
 export const getBooksRequest = ({
@@ -58,6 +58,6 @@ export const removeBookRequest = (id: number) => {
   return axiosInstance.delete(`api/Books/${id}`)
 }
 
-export const getOneBook = (id: number): Promise<AxiosResponse<BookBodyDataGet>> => {
-  return axiosInstance.get<BookBodyDataGet>(`api/Books/${id}`)
+export const getOneBook = (id: number): Promise<AxiosResponse<BookResponse>> => {
+  return axiosInstance.get<BookResponse>(`api/Books/${id}`)
 }

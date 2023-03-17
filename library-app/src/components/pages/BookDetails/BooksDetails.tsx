@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { BookBodyDataGet } from '../../../models/bookData.model'
 import { getOneBook, removeBookRequest } from '../../../services/BooksServices'
 import styles from './BookDetails.module.css'
 import placeholder from '../../../assets/placeholderImg/placeholder.jpeg'
@@ -10,10 +9,11 @@ import DeleteDialog from '../../Layout/DeleteDialog'
 import { convertDateToString } from '../../../helpers/convertDate.helpers'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BookResponse } from '../../../models/bookData.model'
 
 
 const BookDetails = () => {
-  const [bookDetails, setBookDetails] = useState<BookBodyDataGet>({
+  const [bookDetails, setBookDetails] = useState<BookResponse>({
     Id: 0,
     Title: '',
     Authors: [],

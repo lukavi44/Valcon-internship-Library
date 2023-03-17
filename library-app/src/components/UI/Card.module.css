@@ -2,6 +2,7 @@
   border: 10px solid white;
   background: #faf0e6;
 }
+
 @media screen and (min-width: 426px) {
   .card {
     width: 27%;

@@ -1,33 +1,25 @@
-import { BookBodyDataGet } from '../../../models/bookData.model'
+import { BookResponse } from '../../../models/bookData.model'
 import Card from '../../UI/Card'
 import styles from './BooksItem.module.css'
-import { useEffect, useState } from 'react'
 import imgPlaceholder from '../../../assets/placeholderImg/placeholder.jpeg'
-import Modal from '../../Layout/Modal'
-import { removeBookRequest } from '../../../services/BooksServices'
-import EditBookForm from '../BooksList/EditBookForm'
 import { useNavigate } from 'react-router-dom'
 import { convertDateToString } from '../../../helpers/convertDate.helpers'
 
 export interface BookProps {
-  Book: BookBodyDataGet
+  Book: BookResponse
   isLoggedIn: boolean
 }
 
 const BooksItem = ({ Book, isLoggedIn }: BookProps) => {
-  const [coverPlaceholder, setCoverPlaceholder] = useState('')
   const navigate = useNavigate()
-  useEffect(() => {
-    setCoverPlaceholder(imgPlaceholder)
-  }, [])
 
   return (
     <Card>
       <div className={styles['book-holder']}>
         <div className={styles['img-holder']} onClick={() => navigate(`/BookDetails/${Book.Id}`)}>
           <img
-            src={Book.Cover ? `data:image/png;base64, ${Book.Cover}` : coverPlaceholder}
-            alt=''
+            src={Book.Cover ? `data:image/png;base64, ${Book.Cover}` : imgPlaceholder}
+            alt='Book cover'
             className={styles['book-img']}
           />
         </div>

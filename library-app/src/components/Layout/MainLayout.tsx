@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { BookBodyDataGet } from '../../models/bookData.model'
+import { getAccessToken } from '../../helpers/manageLocalStorage'
 import Where from '../../models/where.model'
 import PrivateRoutes from '../../router/PrivateRoutes'
 import Footer from '../Footer/Footer'
@@ -13,7 +13,7 @@ import styles from './MainLayout.module.css'
 
 const MainLayout = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true)
-  const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken'))
+  const [accessToken, setAccessToken] = useState(getAccessToken())
   const [searchTermValue, setSearchTermValue] = useState('')
   const [filter, setFilter] = useState<Where[]>([])
   const [sort, setSort] = useState<string[]>([])

@@ -1,7 +1,7 @@
 import {  useEffect, useRef, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { BookBodyDataGet } from '../../../models/bookData.model'
 import { PageData } from '../../../models/page.model'
+import { BookResponse } from '../../../models/bookData.model'
 import Where from '../../../models/where.model'
 import { getBooksRequest } from '../../../services/BooksServices'
 import BooksList from '../../Books/BooksList/BooksList'
@@ -15,7 +15,7 @@ interface HomepageProps {
 }
 
 const Homepage = ({ search, filter, sort, isLoggedIn }: HomepageProps) => {
-  const [books, setBooks] = useState<BookBodyDataGet[]>([])
+  const [books, setBooks] = useState<BookResponse[]>([])
   const [page, setPage] = useState<PageData>({
     pageLength: 9,
     pageNumber: 1,

@@ -19,16 +19,6 @@ const Login = ({ setIsLoggedIn, setAccessToken }: Props) => {
 
   const [invalidCredentials, setInvalidCredentials] = useState(false)
 
-  const unmatchedCredentialsClasses = invalidCredentials ? styles['invalid-credentials'] : ''
-
-  const emailInputClasses = enteredEmailIsValid
-    ? styles['form-group']
-    : `${styles['form-group']} ${styles['invalid']}`
-
-  const passwordInputClasses = !enteredPasswordIsValid
-    ? `${styles['form-group']} ${styles['invalid']}`
-    : styles['form-group']
-
   const navigateTo = useNavigate()
 
   const getIsFieldValid = (term: string) => {
@@ -47,7 +37,7 @@ const Login = ({ setIsLoggedIn, setAccessToken }: Props) => {
     setEnteredPassword(currentTarget.value.trim())
   }
 
-  const formSubmissionHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+  const formSubmissionHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (!getIsFormValid()) {
       setEnteredEmailIsValid(getIsFieldValid(enteredEmail))
@@ -59,11 +49,11 @@ const Login = ({ setIsLoggedIn, setAccessToken }: Props) => {
       password: enteredPassword,
     }
 
-    await LoginRequest(formData)
+    LoginRequest(formData)
       .then(({ data }) => {
-        setLocalStorage(data)
         setIsLoggedIn(true)
         setAccessToken(data.AccessToken)
+        setLocalStorage(data)
         navigateTo('/')
       })
       .catch((error) => {
@@ -77,7 +67,9 @@ const Login = ({ setIsLoggedIn, setAccessToken }: Props) => {
     <div className={styles.container}>
       <h1>Login</h1>
       <form className={styles['form']} onSubmit={formSubmissionHandler}>
-        <div className={emailInputClasses}>
+        <div
+          className={`${styles['form-group']} ${enteredEmailIsValid ? '' : styles.invalid } ` }
+        >
           <label htmlFor='email'>{!enteredEmailIsValid ? 'Please enter email' : 'Email'}</label>
           <input
             type='email'
@@ -88,7 +80,9 @@ const Login = ({ setIsLoggedIn, setAccessToken }: Props) => {
             onFocus={() => setEnteredEmailIsValid(true)}
           />
         </div>
-        <div className={passwordInputClasses}>
+        <div
+          className={`${styles['form-group']} ${enteredPasswordIsValid ? '' : styles.invalid } ` }
+        >
           <label htmlFor='password'>
             {!enteredPasswordIsValid ? 'Please enter password' : 'Password'}
           </label>
@@ -107,7 +101,7 @@ const Login = ({ setIsLoggedIn, setAccessToken }: Props) => {
           </button>
         </div>
         {invalidCredentials && (
-          <div className={unmatchedCredentialsClasses}>
+          <div className={invalidCredentials ? styles['invalid-credentials'] : ''}>
             <p>User is not found</p>
           </div>
         )}

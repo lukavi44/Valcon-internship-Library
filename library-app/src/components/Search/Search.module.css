@@ -5,9 +5,11 @@
   width: 40%;
   transition: 1s;
 }
+
 .input:focus {
   width: 60%;
 }
+
 .search-wrapp {
   width: 50%;
   display: flex;
@@ -15,6 +17,7 @@
   justify-content: center;
   gap: 1rem;
 }
+
 .search-btn {
   background: none;
   border: none;
@@ -22,9 +25,11 @@
   padding: 0;
   z-index: 2;
 }
+
 .search-img {
   height: 20px;
 }
+
 .sort {
   margin-left: 2rem;
   background-color: #e3d9c7;

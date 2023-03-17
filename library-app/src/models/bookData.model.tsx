@@ -1,11 +1,11 @@
 import { Author, AuthorBookDetails } from './author.model'
 
 export interface BookItemList {
-  items: BookBodyDataGet[]
+  items: BookResponse[]
   count: number
 }
 
-export interface BookBodyData {
+export interface BookRequest {
   Id: number
   Title: string
   Description: string
@@ -16,7 +16,7 @@ export interface BookBodyData {
   AuthorIds: Author[]
 }
 
-export interface BookBodyDataGet {
+export interface BookResponse {
   Id: number
   Title: string
   Available: number
