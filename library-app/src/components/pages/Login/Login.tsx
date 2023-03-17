@@ -68,11 +68,7 @@ const Login = ({ setIsLoggedIn, setAccessToken }: Props) => {
       <h1>Login</h1>
       <form className={styles['form']} onSubmit={formSubmissionHandler}>
         <div
-          className={
-            enteredEmailIsValid
-              ? styles['form-group']
-              : `${styles['form-group']} ${styles['invalid']}`
-          }
+          className={`${styles['form-group']} ${enteredEmailIsValid ? '' : styles.invalid } ` }
         >
           <label htmlFor='email'>{!enteredEmailIsValid ? 'Please enter email' : 'Email'}</label>
           <input
@@ -85,11 +81,7 @@ const Login = ({ setIsLoggedIn, setAccessToken }: Props) => {
           />
         </div>
         <div
-          className={
-            enteredPasswordIsValid
-              ? styles['form-group']
-              : `${styles['form-group']} ${styles['invalid']}`
-          }
+          className={`${styles['form-group']} ${enteredPasswordIsValid ? '' : styles.invalid } ` }
         >
           <label htmlFor='password'>
             {!enteredPasswordIsValid ? 'Please enter password' : 'Password'}
