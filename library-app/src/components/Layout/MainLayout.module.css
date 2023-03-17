@@ -5,6 +5,7 @@
   width: 100%;
   height: 100vh;
 }
+
 .children {
   flex-direction: column;
   align-items: center;
@@ -15,21 +16,31 @@
   width: 100%;
   padding: 2rem;
 }
+
 .inside-wrapp {
   width: 100%;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  background: repeating-linear-gradient(
+    to right,
+    #d9b99b 0px,
+    #eed9c4 20px,
+    #fff0db 20px,
+    #faf0e6 40px
+  );
 }
 
 @media only screen and (min-width: 426px) {
   .wrapp {
     flex-direction: row;
   }
+
   .children {
     height: 100vh;
     justify-content: flex-start;
   }
+
   .inside-wrapp {
     height: 100%;
     overflow: auto;

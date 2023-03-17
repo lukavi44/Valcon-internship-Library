@@ -1,10 +1,10 @@
 import { Navigate, Outlet } from 'react-router-dom'
 
-interface PrivateRoutesPorps {
+interface PrivateRoutesProps {
   accessToken: string | null
 }
 
-const PrivateRoutes = ({ accessToken }: PrivateRoutesPorps) => {
+const PrivateRoutes = ({ accessToken }: PrivateRoutesProps) => {
   return accessToken ? <Outlet /> : <Navigate to='/login' />
 }
 

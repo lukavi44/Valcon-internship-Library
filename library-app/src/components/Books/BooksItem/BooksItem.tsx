@@ -1,14 +1,75 @@
+import { BookResponse } from '../../../models/bookData.model'
 import Card from '../../UI/Card'
-import book1 from '../../../assets/placeholderImg/book1.png'
 import styles from './BooksItem.module.css'
-const BooksItem = () => {
+import { useState } from 'react'
+import imgPlaceholder from '../../../assets/placeholderImg/placeholder.jpeg'
+import Modal from '../../Layout/Modal'
+import { removeBookRequest } from '../../../services/BooksServices'
+import EditBookForm from '../BooksList/EditBookForm'
+
+export interface BookProps {
+  Book: BookResponse
+  isLoggedIn: boolean
+}
+
+const BooksItem = ({ Book, isLoggedIn }: BookProps) => {
+  const [isModalOpened, setIsModalOpened] = useState(false)
+
   return (
     <Card>
       <div className={styles['book-holder']}>
-        <a href=''>
-          <img src={book1} alt='' className={styles['book-img']} />
-        </a>
+        <div className={styles['img-holder']}>
+          <img
+            src={Book.Cover ? `data:image/png;base64, ${Book.Cover}` : imgPlaceholder}
+            alt='Book cover'
+            className={styles['book-img']}
+          />
+        </div>
+        <div className={styles['about-book']}>
+          <h2>{Book.Title}</h2>
+          <div className={styles['published-date']}>
+            <p>Published:</p>
+            <p>{Book.PublishDate}</p>
+          </div>
+          <p>
+            {Book.Description?.substring(0, 50)}
+            {Book.Description?.length > 50 ? '...' : ''}
+          </p>
+          <label>Author(s):</label>
+          {Book.Authors &&
+            Book.Authors.map((Author) => (
+              <p key={Author.Id}>
+                {Author.FirstName} {Author.LastName}
+              </p>
+            ))}
+        </div>
       </div>
+      {isLoggedIn && (
+        <div className={styles['actions-btn-holder']}>
+          <button
+            className={styles['action-btn']}
+            id={styles.edit}
+            onClick={() => setIsModalOpened(true)}
+          >
+            Edit
+          </button>
+          {isModalOpened && (
+            <Modal onClose={() => setIsModalOpened(false)}>
+              <EditBookForm book={Book} />
+            </Modal>
+          )}
+          <button
+            className={styles['action-btn']}
+            id={styles.delete}
+            onClick={() => removeBookRequest(Book.Id)}
+          >
+            Delete
+          </button>
+          <button className={styles['action-btn']} id={styles.rent}>
+            Rent
+          </button>
+        </div>
+      )}
     </Card>
   )
 }

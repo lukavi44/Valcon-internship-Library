@@ -1,34 +1,29 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react'
 import search from '../../assets/icons/search.png'
 import styles from './Header.module.css'
 import sort from '../../assets/icons/sort.png'
 import { NavLink } from 'react-router-dom'
+import { deleteLocalStorage } from '../../helpers/manageLocalStorage'
+import Where from '../../models/where.model'
+import Search from '../Search/Search'
+import debounce from 'lodash.debounce'
 
-const Header = ({
-  isLoggedIn,
-  setIsLoggedIn,
-}: {
+interface HeaderProps {
+  setSearchTermValue: Dispatch<SetStateAction<string>>
   isLoggedIn: boolean
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>
-}) => {
+  setFilter: Dispatch<SetStateAction<Where[]>>
+  setSort: Dispatch<SetStateAction<string[]>>
+}
+
+const Header = ({ setSearchTermValue, isLoggedIn, setIsLoggedIn }: HeaderProps) => {
   const [position, setPosition] = useState(window.scrollY)
   const [isVisible, setIsVisible] = useState(true)
 
   const handleLogout = () => {
-    if (localStorage.getItem('accessToken')) {
-      localStorage.clear()
-    }
+    deleteLocalStorage()
     setIsLoggedIn(false)
   }
-
-  useEffect(() => {
-    if (!localStorage.getItem('accessToken')) {
-      setIsLoggedIn(false)
-    }
-    if (localStorage.getItem('accessToken')) {
-      setIsLoggedIn(true)
-    }
-  }, [setIsLoggedIn])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,25 +40,23 @@ const Header = ({
   return (
     <React.Fragment>
       <header
-        className={styles['search-holder']}
+        className={styles['header-container']}
         style={{ visibility: isVisible ? 'visible' : 'hidden' }}
       >
-        <input type='search' name='search' id='search' className={styles.input} />
-        <button className={styles['search-btn']}>
-          <img src={search} alt='' className={styles['search-img']} />
-        </button>
-        <button className={styles.sort}>
-          <img src={sort} alt='' />
-        </button>
+        {isLoggedIn && (
+          <div className={styles['header-left']}>
+            <Search setSearchTermValue={setSearchTermValue} />
+          </div>
+        )}
         <NavLink to='login'>
           {isLoggedIn && (
-            <button className={styles['login-btn']} type='submit' onClick={handleLogout}>
-              Logout
+            <button className={styles['login-btn']} type='button' onClick={handleLogout}>
+              LOGOUT
             </button>
           )}
           {!isLoggedIn && (
-            <button className={styles['login-btn']} type='submit'>
-              Login
+            <button className={styles['login-btn']} type='button'>
+              LOGIN
             </button>
           )}
         </NavLink>

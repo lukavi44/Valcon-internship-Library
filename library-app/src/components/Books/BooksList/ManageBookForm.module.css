@@ -1,0 +1,71 @@
+.form-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: flex-start;
+  overflow: scroll;
+  gap: 2rem;
+}
+.form-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.form-group-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 2.2rem 2.2rem 2.2rem;
+}
+
+.form-group:last-of-type {
+  border-bottom: none;
+}
+
+.form-group input {
+  background: rgba(142, 140, 140, 0.506);
+}
+
+.form-submit-btn {
+  width: 50%;
+  margin: 1rem auto;
+  padding: 1rem;
+}
+.upload-img {
+  height: 100px;
+}
+
+.select-authors-dropdown {
+  width: 100%;
+}
+
+.add-author-form {
+  margin: 1rem 0;
+  display: flex;
+  align-items: end;
+  flex-direction: column;
+  padding: 0 0 2rem 2rem;
+  z-index: 2;
+  gap: 1rem;
+}
+
+.add-btn {
+  align-self: flex-end;
+  width: 20%;
+}
+
+.bottom {
+  display: flex;
+  gap: 1rem;
+}
+
+.left,
+.right {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  gap: 5rem;
+}

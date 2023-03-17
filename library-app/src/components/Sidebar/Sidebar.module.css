@@ -1,31 +1,39 @@
 .header {
   display: none;
 }
+
 @media only screen and (min-width: 426px) {
   .header {
-    background-color: #d9b97e;
     width: 230px;
     display: flex;
     flex-direction: column;
     height: 100vh;
+    background-color: #faf0e6;
   }
-  .btn-holder {
-    padding: 2rem 0;
-    background-color: #bf8845;
 
-    border-bottom: 2px solid black;
+  .btn-holder {
+    display: flex;
+    align-items: center;
+    padding: 2rem 0;
+    justify-content: center;
   }
+
   .btn-holder:active {
-    background-color: #592e15;
+    background-color: white;
   }
+
+  .btn-holder button {
+    background: none;
+    border: none;
+  }
+
   .sidebar {
     display: flex;
     flex-direction: column;
   }
-  .list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    padding: 0;
+
+  .add-new-book {
+    width: 50%;
+    text-transform: uppercase;
   }
 }

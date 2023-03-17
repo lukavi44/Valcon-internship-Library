@@ -1,18 +1,23 @@
 import BooksItem from '../BooksItem/BooksItem'
 import styles from './BooksList.module.css'
+import { BookResponse } from '../../../models/bookData.model'
 
-const BooksList = () => {
+interface BookListProps {
+  booksProps: BookResponse[]
+  isLoggedIn: boolean
+}
+
+const BooksList = ({ booksProps, isLoggedIn }: BookListProps) => {
   return (
     <div className={styles.wrapp}>
-      <BooksItem />
-      <BooksItem />
-      <BooksItem />
-      <BooksItem />
-      <BooksItem />
-      <BooksItem />
-      <BooksItem />
-      <BooksItem />
-      <BooksItem />
+      <div className={styles['books-wrap']}>
+        {booksProps.length === 0 ? (
+          <p>No available books</p>
+        ) : (
+          booksProps &&
+          booksProps.map((book) => <BooksItem isLoggedIn={isLoggedIn} key={book.Id} Book={book} />)
+        )}
+      </div>
     </div>
   )
 }

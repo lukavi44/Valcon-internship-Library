@@ -4,10 +4,17 @@ import account from '../../assets/icons/account.png'
 import showMore from '../../assets/icons/showMore.png'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { MainLayoutProps } from '../Layout/MainLayout'
+import Modal from '../Layout/Modal'
+import ManageBookForm from '../Books/BooksList/ManageBookForm'
 
-export const Footer = ({ isLoggedIn }: MainLayoutProps) => {
+interface FooterProps {
+  isLoggedIn: boolean
+}
+
+export const Footer = ({ isLoggedIn }: FooterProps) => {
   const [adminOptions, setAdminOptions] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
   const navigateTo = useNavigate()
 
   const closeAdminOptions = () => {
@@ -21,25 +28,25 @@ export const Footer = ({ isLoggedIn }: MainLayoutProps) => {
   return (
     <footer className={styles.footer}>
       <div className={styles['btn-holder']} onClick={handleHomeNavigation}>
-        <a>
+        <button>
           <img src={home} alt='' />
-        </a>
+        </button>
       </div>
 
       {isLoggedIn && (
         <div className={styles['btn-holder']}>
-          <a>
+          <button>
             <img src={account} alt='' />
-          </a>
+          </button>
         </div>
       )}
-      {adminOptions && (
-        <div className={styles['btn-holder']}>
-          <a onClick={() => setAdminOptions(!adminOptions)}>
-            <img src={showMore} alt='' />
-          </a>
-        </div>
-      )}
+
+      <div className={styles['btn-holder']}>
+        <button onClick={() => setAdminOptions(!adminOptions)}>
+          <img src={showMore} alt='' />
+        </button>
+      </div>
+
       {adminOptions && (
         <nav className={styles.sidebar}>
           <div className={styles['btn-holder']}>
@@ -48,16 +55,21 @@ export const Footer = ({ isLoggedIn }: MainLayoutProps) => {
             </button>
           </div>
           <div className={styles['btn-holder']}>
-            <a>
+            <button>
               <img src={account} alt='' />
-            </a>
+            </button>
           </div>
           <div className={styles['btn-holder']}>
-            <a>
-              <img src={account} alt='' />
-            </a>
+            <button className={styles['add-new-book']} onClick={() => setIsModalOpen(true)}>
+              Add New Book +
+            </button>
           </div>
         </nav>
+      )}
+      {isModalOpen && (
+        <Modal onClose={() => setIsModalOpen(false)}>
+          <ManageBookForm />
+        </Modal>
       )}
     </footer>
   )

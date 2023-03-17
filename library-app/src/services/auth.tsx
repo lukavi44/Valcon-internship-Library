@@ -7,9 +7,9 @@ export interface LoginRequestData {
 }
 
 export interface LoginResponseData {
-  accessToken: string
-  refreshToken: string
-  expiration: string
+  AccessToken: string
+  RefreshToken: string
+  Expiration: string
 }
 
 const LoginRequest = async (body: LoginRequestData): Promise<AxiosResponse<LoginResponseData>> => {

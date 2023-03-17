@@ -1,13 +1,10 @@
 .card {
-  box-shadow: 1px 1px 1px black;
-  border: 1px solid black;
-  /* padding: 2rem; */
-  width: 100%;
-  border-radius: 1rem;
+  border: 10px solid white;
+  background: transparent;
 }
 
-@media only screen and (min-width: 426px) {
+@media screen and (min-width: 426px) {
   .card {
-    width: 27%;
+    width: 30%;
   }
 }

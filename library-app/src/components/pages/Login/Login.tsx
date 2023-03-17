@@ -1,139 +1,112 @@
 import axios from 'axios'
-import React, { FormEvent, useEffect, useState } from 'react'
+import React, { Dispatch, FormEvent, SetStateAction, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { setLocalStorage } from '../../../helpers/manageLocalStorage'
 import LoginRequest, { LoginRequestData } from '../../../services/auth'
-import MainLayout from '../../Layout/MainLayout'
 import styles from './Login.module.css'
 
-const Login = () => {
+interface Props {
+  setIsLoggedIn: Dispatch<SetStateAction<boolean>>
+  setAccessToken: Dispatch<SetStateAction<string | null>>
+}
+
+const Login = ({ setIsLoggedIn, setAccessToken }: Props) => {
   const [enteredEmail, setEnteredEmail] = useState('')
-  const [enteredEmailIsValid, setEnteredEmailIsValid] = useState(false)
+  const [enteredEmailIsValid, setEnteredEmailIsValid] = useState(true)
 
   const [enteredPassword, setEnteredPassword] = useState('')
-  const [enteredPasswordIsValid, setEnteredPasswordIsValid] = useState(false)
+  const [enteredPasswordIsValid, setEnteredPasswordIsValid] = useState(true)
 
   const [invalidCredentials, setInvalidCredentials] = useState(false)
 
   const navigateTo = useNavigate()
 
-  useEffect(() => {
-    setEnteredEmailIsValid(true)
-    setEnteredPasswordIsValid(true)
-  }, [])
+  const getIsFieldValid = (term: string) => {
+    return term.trim() !== ''
+  }
+
+  const getIsFormValid = () => {
+    return getIsFieldValid(enteredEmail) && getIsFieldValid(enteredPassword)
+  }
 
   const handleEmailChange = ({ currentTarget }: FormEvent<HTMLInputElement>) => {
-    if (currentTarget.value.trim() === '') {
-      setEnteredEmailIsValid(false)
-    }
-    setEnteredEmail(currentTarget.value)
-    setEnteredEmailIsValid(true)
-  }
-
-  const handleOnBlurEmail = () => {
-    if (enteredEmail.trim() === '') {
-      setEnteredEmailIsValid(false)
-      return
-    }
-  }
-  const handleOnBlurPassword = () => {
-    if (enteredPassword.trim() === '') {
-      setEnteredPasswordIsValid(false)
-      return
-    }
+    setEnteredEmail(currentTarget.value.trim())
   }
 
   const handlePasswordChange = ({ currentTarget }: FormEvent<HTMLInputElement>) => {
-    if (currentTarget.value.trim() === '') {
-      setEnteredPasswordIsValid(false)
-    }
-    setEnteredPassword(currentTarget.value)
-    setEnteredPasswordIsValid(true)
+    setEnteredPassword(currentTarget.value.trim())
   }
 
-  const formSubmissionHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+  const formSubmissionHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (!getIsFormValid()) {
+      setEnteredEmailIsValid(getIsFieldValid(enteredEmail))
+      setEnteredPasswordIsValid(getIsFieldValid(enteredPassword))
+      return
+    }
     const formData: LoginRequestData = {
       email: enteredEmail,
       password: enteredPassword,
     }
-    if (!enteredEmailIsValid || !enteredPasswordIsValid) {
-      console.log('greska')
-    } else {
-      await LoginRequest(formData)
-        .then(({ data }) => {
-          localStorage.setItem('accessToken', data.accessToken)
-          localStorage.setItem('refreshToken', data.refreshToken)
-          localStorage.setItem('expiration', data.expiration)
-          navigateTo('/')
-          console.log(data)
-        })
-        .catch((error) => {
-          if (axios.isAxiosError(error)) {
-            if (error.response?.status === 401) {
-              setInvalidCredentials(true)
-              console.log('pogresni kredencijali')
-            }
-          }
-        })
-    }
+
+    LoginRequest(formData)
+      .then(({ data }) => {
+        setIsLoggedIn(true)
+        setAccessToken(data.AccessToken)
+        setLocalStorage(data)
+        navigateTo('/')
+      })
+      .catch((error) => {
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
+          setInvalidCredentials(true)
+        }
+      })
   }
 
-  const unmatchedCredentials = invalidCredentials
-  const unmatchedCredentialsClasses = unmatchedCredentials ? styles['invalid-credentials'] : ''
-
-  const emailInputIsInvalid = !enteredEmailIsValid
-  const emailInputClasses = emailInputIsInvalid
-    ? `${styles['form-group']} ${styles['invalid']}`
-    : styles['form-group']
-
-  const passwordInputIsInvalid = !enteredPasswordIsValid
-  const passwordInputClasses = passwordInputIsInvalid
-    ? `${styles['form-group']} ${styles['invalid']}`
-    : styles['form-group']
-
   return (
-    <MainLayout>
-      <div className={styles.container}>
-        <h1>Login</h1>
-        <form className={styles['form']} onSubmit={formSubmissionHandler}>
-          <div className={emailInputClasses}>
-            <label htmlFor='email'>
-              {emailInputIsInvalid ? 'Please enter email' : 'Email'}
-              {}
-            </label>
-            <input
-              type='email'
-              id='email'
-              value={enteredEmail}
-              onChange={handleEmailChange}
-              onBlur={handleOnBlurEmail}
-            />
+    <div className={styles.container}>
+      <h1>Login</h1>
+      <form className={styles['form']} onSubmit={formSubmissionHandler}>
+        <div
+          className={`${styles['form-group']} ${enteredEmailIsValid ? '' : styles.invalid } ` }
+        >
+          <label htmlFor='email'>{!enteredEmailIsValid ? 'Please enter email' : 'Email'}</label>
+          <input
+            type='email'
+            id='email'
+            value={enteredEmail}
+            onChange={handleEmailChange}
+            onBlur={() => setEnteredEmailIsValid(getIsFieldValid(enteredEmail))}
+            onFocus={() => setEnteredEmailIsValid(true)}
+          />
+        </div>
+        <div
+          className={`${styles['form-group']} ${enteredPasswordIsValid ? '' : styles.invalid } ` }
+        >
+          <label htmlFor='password'>
+            {!enteredPasswordIsValid ? 'Please enter password' : 'Password'}
+          </label>
+          <input
+            type='password'
+            id='password'
+            value={enteredPassword}
+            onChange={handlePasswordChange}
+            onBlur={() => setEnteredPasswordIsValid(getIsFieldValid(enteredPassword))}
+            onFocus={() => setEnteredPasswordIsValid(true)}
+          />
+        </div>
+        <div className={styles['form-group']}>
+          <button className={styles.btn} type='submit'>
+            Login
+          </button>
+        </div>
+        {invalidCredentials && (
+          <div className={invalidCredentials ? styles['invalid-credentials'] : ''}>
+            <p>User is not found</p>
           </div>
-          <div className={passwordInputClasses}>
-            <label htmlFor='password'>
-              {passwordInputIsInvalid ? 'Please enter password' : 'Password'}
-            </label>
-            <input
-              type='password'
-              id='password'
-              value={enteredPassword}
-              onChange={handlePasswordChange}
-              onBlur={handleOnBlurPassword}
-            />
-          </div>
-          <div className={styles['form-group']}>
-            <button className={styles.btn} type='submit'>
-              Login
-            </button>
-          </div>
-          {invalidCredentials && (
-            <div className={unmatchedCredentialsClasses}>
-              <p>User is not found</p>
-            </div>
-          )}
-        </form>
-      </div>
-    </MainLayout>
+        )}
+      </form>
+    </div>
   )
 }
 

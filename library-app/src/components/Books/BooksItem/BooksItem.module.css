@@ -1,7 +1,70 @@
-.book-img {
-  width: 50%;
+* {
+  margin: 0;
 }
 
 .book-holder {
   padding: 2rem;
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+}
+
+.img-holder {
+  box-shadow: 20px 20px 23px #e3d9c7;
+  height: 200px;
+}
+
+.book-img {
+  width: 180px;
+  height: 200px;
+}
+
+.about-book {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: end;
+}
+
+label {
+  font-weight: bold;
+}
+
+.actions-btn-holder {
+  display: flex;
+  justify-content: space-around;
+  padding: 1rem 0;
+}
+
+.action-btn {
+  padding: 1rem 2rem;
+  background: none;
+  color: white;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.action-btn#edit {
+  background-color: rgba(0, 0, 255);
+}
+
+.action-btn#delete {
+  background-color: rgba(255, 0, 0);
+}
+
+.action-btn#rent {
+  background-color: rgba(0, 128, 0);
+}
+
+.action-btn#edit:hover {
+  opacity: 1;
+}
+
+.action-btn#delete:hover {
+  opacity: 1;
+}
+
+.action-btn#rent:hover {
+  opacity: 1;
 }
