@@ -12,7 +12,6 @@ import Sidebar from '../Sidebar/Sidebar'
 import styles from './MainLayout.module.css'
 
 const MainLayout = () => {
-  const [books, setBooks] = useState<BookBodyDataGet[]>([])
   const [isLoggedIn, setIsLoggedIn] = useState(true)
   const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken'))
   const [searchTermValue, setSearchTermValue] = useState('')
@@ -45,8 +44,6 @@ const MainLayout = () => {
             path='/'
             element={
               <Homepage
-                books={books}
-                setBooks={setBooks}
                 search={searchTermValue}
                 filter={filter}
                 sort={sort}
