@@ -1,4 +1,4 @@
-import { Author } from './author.model'
+import { Author, AuthorBookDetails } from './author.model'
 
 export interface BookItemList {
   items: BookBodyDataGet[]
@@ -26,4 +26,16 @@ export interface BookBodyDataGet {
   Cover: string
   PublishDate: string
   Authors: Author[]
+}
+
+export interface BookDetailsRequest {
+  Id: number
+  Title: string
+  Available: number
+  Description: string
+  Isbn: string
+  Quantity: number
+  Cover: string
+  PublishDate: Date
+  Authors: AuthorBookDetails[]
 }
