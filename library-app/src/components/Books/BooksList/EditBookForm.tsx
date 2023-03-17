@@ -1,18 +1,18 @@
 import { FormEvent, useCallback, useEffect, useState } from 'react'
 import Select, { MultiValue } from 'react-select'
 import axios from 'axios'
-import { Author, AuthorPost } from '../../../models/author.model'
-import { BookResponse } from '../../../models/bookData.model'
+import {  Author, AuthorBookDetails, AuthorPost } from '../../../models/author.model'
+import { BookDetailsRequest } from '../../../models/bookData.model'
 import { getAuthors, postAuthor } from '../../../services/AuthorServices'
 import { putBookRequest } from '../../../services/BooksServices'
 import styles from './ManageBookForm.module.css'
 
 interface EditBookFormProps {
-  book: BookResponse
+  book: BookDetailsRequest
 }
 
 const EditBookForm = ({ book }: EditBookFormProps) => {
-  const [authors, setAuthors] = useState<Author[]>([])
+  const [authors, setAuthors] = useState<AuthorBookDetails[]>([])
   const [isAuthorFormOpen, setIsAuthorFormOpen] = useState(false)
   const [requestCover, setRequestCover] = useState<Blob>(new Blob())
   const [cover, setCover] = useState('')
@@ -20,7 +20,7 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
     FirstName: '',
     LastName: '',
   })
-  const [formData, setFormData] = useState<BookResponse>({
+  const [formData, setFormData] = useState<BookDetailsRequest>({
     Id: book.Id,
     Title: book.Title,
     Description: book.Description,
@@ -84,7 +84,7 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
     }
   }
 
-  const onChangeAuthors = (newAuthors: MultiValue<Author>) => {
+  const onChangeAuthors = (newAuthors: MultiValue<AuthorBookDetails>) => {
     setFormData((prev) => ({ ...prev, AuthorIds: newAuthors.map((authors) => authors) }))
   }
 
@@ -175,10 +175,10 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
                 id='authorIds'
                 options={authors}
                 defaultValue={formData.Authors}
-                getOptionLabel={(option) => `${option.FirstName} ${option.LastName}`}
+                getOptionLabel={(option) => `${option.Firstname} ${option.Lastname}`}
                 onChange={onChangeAuthors}
                 isMulti
-                getOptionValue={(option: Author) => option.Id.toString()}
+                getOptionValue={(option: AuthorBookDetails) => option.Id.toString()}
               />
               {!isAuthorFormOpen && (
                 <button onClick={openFormhandler} className={styles['add-btn']}>

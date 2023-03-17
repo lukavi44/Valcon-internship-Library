@@ -1,10 +1,10 @@
-import { BookBodyDataGet } from '../../models/bookData.model'
 import styles from './DeleteDialog.module.css'
 import deleteIcon from '../../assets/icons/delete.png'
 import { MouseEventHandler } from 'react'
+import { BookDetailsRequest, BookResponse } from '../../models/bookData.model'
 
 interface DeleteDialogProps {
-  book: BookBodyDataGet
+  book: BookDetailsRequest
   closeDeleteDialog: MouseEventHandler<HTMLButtonElement>
   deleteBook: MouseEventHandler<HTMLButtonElement>
 }

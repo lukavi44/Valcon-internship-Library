@@ -28,6 +28,17 @@ export interface BookResponse {
   Authors: Author[]
 }
 
+export interface BookPostRequest {
+   Title: string
+  Available: number
+  Description: string
+  Isbn: string
+  Quantity: number
+  Cover: string
+  PublishDate: string
+  Authors: Author[]
+}
+
 export interface BookDetailsRequest {
   Id: number
   Title: string
@@ -36,6 +47,6 @@ export interface BookDetailsRequest {
   Isbn: string
   Quantity: number
   Cover: string
-  PublishDate: Date
+  PublishDate: string
   Authors: AuthorBookDetails[]
 }

@@ -9,11 +9,11 @@ import DeleteDialog from '../../Layout/DeleteDialog'
 import { convertDateToString } from '../../../helpers/convertDate.helpers'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BookResponse } from '../../../models/bookData.model'
+import { BookDetailsRequest } from '../../../models/bookData.model'
 
 
 const BookDetails = () => {
-  const [bookDetails, setBookDetails] = useState<BookResponse>({
+  const [bookDetails, setBookDetails] = useState<BookDetailsRequest>({
     Id: 0,
     Title: '',
     Authors: [],
@@ -68,7 +68,7 @@ const BookDetails = () => {
         <ul>
           {bookDetails?.Authors.map((author) => (
             <li key={author.Id}>
-              {author.FirstName} {author.LastName}Ime Autora
+              {author.Firstname} {author.Lastname}Ime Autora
             </li>
           ))}
         </ul>
