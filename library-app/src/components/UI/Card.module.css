@@ -1,6 +1,6 @@
 .card {
   border: 10px solid white;
-  background: transparent;
+  background: #faf0e6
 }
 
 @media screen and (min-width: 426px) {

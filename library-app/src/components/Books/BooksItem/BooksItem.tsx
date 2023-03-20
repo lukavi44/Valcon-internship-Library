@@ -1,19 +1,13 @@
 import { BookResponse } from '../../../models/bookData.model'
 import Card from '../../UI/Card'
 import styles from './BooksItem.module.css'
-import { useState } from 'react'
 import imgPlaceholder from '../../../assets/placeholderImg/placeholder.jpeg'
-import Modal from '../../Layout/Modal'
-import { removeBookRequest } from '../../../services/BooksServices'
-import EditBookForm from '../BooksList/EditBookForm'
-
 export interface BookProps {
   Book: BookResponse
   accessToken: string | null
 }
 
 const BooksItem = ({ Book, accessToken }: BookProps) => {
-  const [isModalOpened, setIsModalOpened] = useState(false)
 
   return (
     <Card>
@@ -44,32 +38,6 @@ const BooksItem = ({ Book, accessToken }: BookProps) => {
             ))}
         </div>
       </div>
-      {accessToken && (
-        <div className={styles['actions-btn-holder']}>
-          <button
-            className={styles['action-btn']}
-            id={styles.edit}
-            onClick={() => setIsModalOpened(true)}
-          >
-            Edit
-          </button>
-          {isModalOpened && (
-            <Modal onClose={() => setIsModalOpened(false)}>
-              <EditBookForm book={Book} />
-            </Modal>
-          )}
-          <button
-            className={styles['action-btn']}
-            id={styles.delete}
-            onClick={() => removeBookRequest(Book.Id)}
-          >
-            Delete
-          </button>
-          <button className={styles['action-btn']} id={styles.rent}>
-            Rent
-          </button>
-        </div>
-      )}
     </Card>
   )
 }

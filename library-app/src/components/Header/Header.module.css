@@ -1,8 +1,8 @@
 .header-container {
   width: 100%;
   display: flex;
-  background-color: #d9b97e;
-  padding: 29px 0;
+  background-color: #d9b99b;
+  padding: 20px 0;
   justify-content: flex-end;
   gap: 1rem;
   border-bottom: 2px solid black;
