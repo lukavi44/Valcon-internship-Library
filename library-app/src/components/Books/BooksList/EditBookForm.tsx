@@ -1,4 +1,4 @@
-import { FormEvent, useCallback, useEffect, useState } from 'react'
+import { Dispatch, FormEvent, SetStateAction, useCallback, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import Select, { MultiValue } from 'react-select'
 import axios from 'axios'
@@ -8,18 +8,17 @@ import { getAuthors, postAuthor } from '../../../services/AuthorServices'
 import { putBookRequest } from '../../../services/BooksServices'
 import styles from './ManageBookForm.module.css'
 import { convertDateToString } from '../../../helpers/convertDate.helpers'
-import { useNavigate } from 'react-router-dom'
 
 interface EditBookFormProps {
-  book:  BookDetailsRequest
+  book: BookDetailsRequest
+  setIsEditModalOpened: Dispatch<SetStateAction<boolean>>
 }
 
-const EditBookForm = ({ book }: EditBookFormProps) => {
+const EditBookForm = ({ book, setIsEditModalOpened }: EditBookFormProps) => {
   const [authors, setAuthors] = useState<Author[]>([])
   const [isAuthorFormOpen, setIsAuthorFormOpen] = useState(false)
   const [requestCover, setRequestCover] = useState<Blob>(new Blob())
   const [cover, setCover] = useState('')
-  const navigate = useNavigate()
   const [authorForm, setAuthorForm] = useState<AuthorPost>({
     FirstName: '',
     LastName: '',
@@ -93,11 +92,10 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
       form.append('PublishDate', formData.PublishDate)
       form.append('Quantity', formData.Quantity.toString())
       form.append('Title', formData.Title)
-      formData.Authors.forEach((author) => form.append('AuthorIds', author.Id.toString()))
-      
+      formData.Authors.forEach((author) => form.append('AuthorIds', author.Id.toString()))      
       await putBookRequest(form)
       toast.success(`${formData.Title} successfully edited`)
-      navigate('/')
+      setIsEditModalOpened(false)
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         toast.error('Authorization is needed')
@@ -136,7 +134,7 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
             src={book.Cover ? `data:image/png;base64, ${book.Cover}` : cover}
             alt='Book Cover'
           />
-          <input id='cover' name='cover' type='file'  onChange={handleFileChange} />
+          <input id='cover' name='cover'  type='file'  onChange={handleFileChange} />
         </div>
         <div className={styles.bottom}>
           <div className={styles.left}>

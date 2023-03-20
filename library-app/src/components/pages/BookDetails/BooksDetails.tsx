@@ -105,7 +105,7 @@ const BookDetails = () => {
         </button>
         {isEditModalOpened && (
           <Modal onClose={() => setIsEditModalOpened(false)}>
-            <EditBookForm book={bookDetails} />
+            <EditBookForm setIsEditModalOpened={setIsEditModalOpened} book={bookDetails} />
           </Modal>
         )}
         <button
