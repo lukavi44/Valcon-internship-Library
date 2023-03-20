@@ -8,10 +8,10 @@ import Modal from '../Layout/Modal'
 import ManageBookForm from '../Books/BooksList/ManageBookForm'
 
 interface SidebarProps {
-  isLoggedIn: boolean
+  accessToken: string | null
 }
 
-const Sidebar = ({ isLoggedIn }: SidebarProps) => {
+const Sidebar = ({ accessToken }: SidebarProps) => {
   const [isModalOpened, setIsModalOpened] = useState(false)
   const [adminOptions, setAdminOptions] = useState(false)
 
@@ -29,21 +29,21 @@ const Sidebar = ({ isLoggedIn }: SidebarProps) => {
             <img src={home} alt='' />
           </button>
         </div>
-        {isLoggedIn && (
+        {accessToken && (
           <div className={styles['btn-holder']}>
             <button type='button'>
               <img src={account} alt='' />
             </button>
           </div>
         )}
-        {isLoggedIn && (
+        {accessToken && (
           <div className={styles['btn-holder']} onClick={() => setAdminOptions(!adminOptions)}>
             <button type='button'>
               <img src={showMore} alt='' />
             </button>
           </div>
         )}
-        {adminOptions && isLoggedIn && (
+        {adminOptions && accessToken && (
           <nav className={styles.sidebar}>
             <div className={styles['btn-holder']}>
               <button

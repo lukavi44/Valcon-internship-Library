@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
+import {  useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { getAccessToken } from '../../helpers/manageLocalStorage'
 import { BookResponse } from '../../models/bookData.model'
 import Where from '../../models/where.model'
 import PrivateRoutes from '../../router/PrivateRoutes'
@@ -14,26 +13,19 @@ import styles from './MainLayout.module.css'
 
 const MainLayout = () => {
   const [books, setBooks] = useState<BookResponse[]>([])
-  const [isLoggedIn, setIsLoggedIn] = useState(true)
-  const [accessToken, setAccessToken] = useState(getAccessToken())
+  const [accessToken, setAccessToken] = useState<string | null>(localStorage.getItem('accessToken'))
   const [searchTermValue, setSearchTermValue] = useState('')
   const [filter, setFilter] = useState<Where[]>([])
   const [sort, setSort] = useState<string[]>([])
 
-  useEffect(() => {
-    if (accessToken !== '') {
-      setIsLoggedIn(true)
-    }
-  }, [])
-
   return (
     <div className={styles.wrapp}>
-      <Sidebar isLoggedIn={isLoggedIn} />
+      <Sidebar accessToken={accessToken} />
       <div className={styles['inside-wrapp']}>
         <Header
           setSearchTermValue={setSearchTermValue}
-          isLoggedIn={isLoggedIn}
-          setIsLoggedIn={setIsLoggedIn}
+          setAccessToken={setAccessToken}
+          accessToken={accessToken}
           setFilter={setFilter}
           setSort={setSort}
         />
@@ -51,17 +43,17 @@ const MainLayout = () => {
                 search={searchTermValue}
                 filter={filter}
                 sort={sort}
-                isLoggedIn={isLoggedIn}
+                accessToken={accessToken}
               />
             }
           />
           <Route
             path='login'
-            element={<Login setIsLoggedIn={setIsLoggedIn} setAccessToken={setAccessToken} />}
+            element={<Login  setAccessToken={setAccessToken} />}
           />
         </Routes>
       </div>
-      <Footer isLoggedIn={isLoggedIn} />
+      <Footer accessToken={accessToken} />
     </div>
   )
 }

@@ -9,10 +9,10 @@ import EditBookForm from '../BooksList/EditBookForm'
 
 export interface BookProps {
   Book: BookResponse
-  isLoggedIn: boolean
+  accessToken: string | null
 }
 
-const BooksItem = ({ Book, isLoggedIn }: BookProps) => {
+const BooksItem = ({ Book, accessToken }: BookProps) => {
   const [isModalOpened, setIsModalOpened] = useState(false)
 
   return (
@@ -44,7 +44,7 @@ const BooksItem = ({ Book, isLoggedIn }: BookProps) => {
             ))}
         </div>
       </div>
-      {isLoggedIn && (
+      {accessToken && (
         <div className={styles['actions-btn-holder']}>
           <button
             className={styles['action-btn']}
