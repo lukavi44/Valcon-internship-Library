@@ -1,7 +1,7 @@
 import styles from './DeleteDialog.module.css'
 import deleteIcon from '../../assets/icons/delete.png'
 import { MouseEventHandler } from 'react'
-import { BookDetailsRequest, BookResponse } from '../../models/bookData.model'
+import { BookDetailsRequest } from '../../models/bookData.model'
 
 interface DeleteDialogProps {
   book: BookDetailsRequest
