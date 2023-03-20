@@ -7,6 +7,7 @@ import { Author, AuthorPost } from '../../../models/author.model'
 import { BookRequest } from '../../../models/bookData.model'
 import placeholder from '../../../assets/placeholderImg/placeholder.jpeg'
 import styles from './ManageBookForm.module.css'
+import { toast } from 'react-toastify'
 
 const ManageBookForm = () => {
   const [authors, setAuthors] = useState<Author[]>([])
@@ -72,9 +73,10 @@ const ManageBookForm = () => {
       formData.AuthorIds.forEach((author) => form.append('AuthorIds', author.Id.toString()))
 
       await postBookRequest(form)
+      toast(`${formData.Quantity} copies of ${formData.Title} is successfully created`)
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        console.error('neautorizovan')
+        toast('Authorization needed')
       }
     }
   }
@@ -91,9 +93,10 @@ const ManageBookForm = () => {
       form.append('FirstName', authorForm.FirstName)
       form.append('LastName', authorForm.LastName)
       postAuthor(form)
+      toast(`Author ${authorForm.FirstName} ${authorForm.LastName} successfully added`)
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        console.error('neautorizovan')
+        toast('Authorization needed')
       }
     }
   }

@@ -68,7 +68,7 @@ const BookDetails = () => {
         <ul>
           {bookDetails?.Authors.map((author) => (
             <li key={author.Id}>
-              {author.Firstname} {author.Lastname}Ime Autora
+              {author.Firstname} {author.Lastname}
             </li>
           ))}
         </ul>

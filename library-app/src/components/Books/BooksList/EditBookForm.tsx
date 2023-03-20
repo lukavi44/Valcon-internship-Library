@@ -6,6 +6,7 @@ import {  BookDetailsRequest, BookResponse } from '../../../models/bookData.mode
 import { getAuthors, postAuthor } from '../../../services/AuthorServices'
 import { putBookRequest } from '../../../services/BooksServices'
 import styles from './ManageBookForm.module.css'
+import { toast } from 'react-toastify'
 
 interface EditBookFormProps {
   book: BookResponse | BookDetailsRequest
@@ -88,9 +89,10 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
       formData.Authors.forEach((author) => form.append('Authors', author.Id.toString()))
 
       await putBookRequest(form)
+      toast(`${formData.Title} successfully edited`)
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        console.error('neautorizovan')
+        toast('Authorization is needed')
       }
     }
   }
@@ -107,6 +109,8 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
       form.append('FirstName', authorForm.FirstName)
       form.append('LastName', authorForm.LastName)
       postAuthor(form)
+      toast(`Author ${authorForm.FirstName} ${authorForm.LastName} successfully added`)
+
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         console.error('neautorizovan')
