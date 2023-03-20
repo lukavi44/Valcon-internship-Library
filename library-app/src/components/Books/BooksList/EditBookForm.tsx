@@ -1,15 +1,17 @@
 import { FormEvent, useCallback, useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 import Select, { MultiValue } from 'react-select'
 import axios from 'axios'
 import {  Author, AuthorBookDetails, AuthorPost } from '../../../models/author.model'
-import {  BookDetailsRequest, BookResponse } from '../../../models/bookData.model'
+import {  BookDetailsRequest } from '../../../models/bookData.model'
 import { getAuthors, postAuthor } from '../../../services/AuthorServices'
 import { putBookRequest } from '../../../services/BooksServices'
 import styles from './ManageBookForm.module.css'
-import { toast } from 'react-toastify'
+import { convertDateToString } from '../../../helpers/convertDate.helpers'
+import { useNavigate } from 'react-router-dom'
 
 interface EditBookFormProps {
-  book: BookResponse | BookDetailsRequest
+  book:  BookDetailsRequest
 }
 
 const EditBookForm = ({ book }: EditBookFormProps) => {
@@ -17,6 +19,7 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
   const [isAuthorFormOpen, setIsAuthorFormOpen] = useState(false)
   const [requestCover, setRequestCover] = useState<Blob>(new Blob())
   const [cover, setCover] = useState('')
+  const navigate = useNavigate()
   const [authorForm, setAuthorForm] = useState<AuthorPost>({
     FirstName: '',
     LastName: '',
@@ -25,22 +28,22 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
     Id: book.Id,
     Title: book.Title,
     Description: book.Description,
-    Isbn: book.Isbn,
+    ISBN: book.ISBN,
     Available: book.Available,
     Quantity: book.Quantity,
     Cover: book.Cover,
     PublishDate: book.PublishDate,
-    Authors: book.Authors as unknown as AuthorBookDetails[],
+    Authors: book.Authors,
   })
 
   useEffect(() => {
+    console.log(formData)
     try {
       fetchAuthorsData()
     } catch (error) {
-       console.error('nema autora', error)
+       toast.error('No authors to show')
     }
   }, [cover])
-
 
   const convertModel = (authors: AuthorBookDetails[]): Author[] => {
     return authors.map((author) => {
@@ -78,21 +81,26 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
   const editBookHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     try {
+      if (formData.ISBN.trim() === '' || formData.Quantity === 0 || formData.Title.trim() === '') {
+        toast.error('Quantity, ISBN and Title inputs must be filled')
+        return
+        }
       const form = new FormData()
       form.append('Id', book.Id.toString())
       form.append('Cover', requestCover)
       form.append('Description', formData.Description)
-      form.append('Isbn', formData.Isbn)
+      form.append('Isbn', formData.ISBN)
       form.append('PublishDate', formData.PublishDate)
       form.append('Quantity', formData.Quantity.toString())
       form.append('Title', formData.Title)
-      formData.Authors.forEach((author) => form.append('Authors', author.Id.toString()))
-
+      formData.Authors.forEach((author) => form.append('AuthorIds', author.Id.toString()))
+      
       await putBookRequest(form)
-      toast(`${formData.Title} successfully edited`)
+      toast.success(`${formData.Title} successfully edited`)
+      navigate('/')
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        toast('Authorization is needed')
+        toast.error('Authorization is needed')
       }
     }
   }
@@ -109,11 +117,12 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
       form.append('FirstName', authorForm.FirstName)
       form.append('LastName', authorForm.LastName)
       postAuthor(form)
-      toast(`Author ${authorForm.FirstName} ${authorForm.LastName} successfully added`)
+      toast.success(`Author ${authorForm.FirstName} ${authorForm.LastName} successfully added`)
+      
 
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        console.error('neautorizovan')
+        toast.error(`${error}`)
       }
     }
   }
@@ -127,7 +136,7 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
             src={book.Cover ? `data:image/png;base64, ${book.Cover}` : cover}
             alt='Book Cover'
           />
-          <input id='cover' name='cover' type='file' onChange={handleFileChange} />
+          <input id='cover' name='cover' type='file'  onChange={handleFileChange} />
         </div>
         <div className={styles.bottom}>
           <div className={styles.left}>
@@ -153,10 +162,10 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
             <div className={styles['form-group']}>
               <label htmlFor='isbn'>ISBN</label>
               <input
-                id='isbn'
-                name='isbn'
+                id='Isbn'
+                name='Isbn'
                 type='text'
-                defaultValue={formData.Isbn}
+                defaultValue={formData.ISBN}
                 onChange={(e) => setFormData((prev) => ({ ...prev, Isbn: e.target.value }))}
               />
             </div>
@@ -178,7 +187,7 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
                 id='publishDate'
                 name='publishDate'
                 type='date'
-                defaultValue={formData.PublishDate}
+                defaultValue={convertDateToString(formData.PublishDate, 'yyyy-MM-dd')}
                 onChange={(e) => setFormData((prev) => ({ ...prev, PublishDate: e.target.value }))}
               />
             </div>
