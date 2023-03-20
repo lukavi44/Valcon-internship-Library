@@ -12,10 +12,10 @@ interface HomepageProps {
   sort: string[]
   books: BookResponse[]
   setBooks: Dispatch<SetStateAction<BookResponse[]>>
-  isLoggedIn: boolean
+  accessToken: string | null
 }
 
-const Homepage = ({ books, setBooks, search, filter, sort, isLoggedIn }: HomepageProps) => {
+const Homepage = ({ books, setBooks, search, filter, sort, accessToken }: HomepageProps) => {
   const [pageNumber, setPageNumber] = useState(1)
   const [hasMoreBooks, setHasMoreBooks] = useState(true)
   const pageLength = 9
@@ -83,7 +83,7 @@ const Homepage = ({ books, setBooks, search, filter, sort, isLoggedIn }: Homepag
           endMessage={<h4 style={{ textAlign: 'center' }}>You have browsed all books</h4>}
           scrollableTarget='homepage'
         >
-          <BooksList isLoggedIn={isLoggedIn} booksProps={books} />
+          <BooksList accessToken={accessToken} booksProps={books} />
         </InfiniteScroll>
       ) : (
         <div className={styles['lds-spinner']}>

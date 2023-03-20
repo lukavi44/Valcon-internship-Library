@@ -10,19 +10,19 @@ import debounce from 'lodash.debounce'
 
 interface HeaderProps {
   setSearchTermValue: Dispatch<SetStateAction<string>>
-  isLoggedIn: boolean
-  setIsLoggedIn: Dispatch<SetStateAction<boolean>>
+  accessToken: string | null
+  setAccessToken: Dispatch<SetStateAction<string | null>>
   setFilter: Dispatch<SetStateAction<Where[]>>
   setSort: Dispatch<SetStateAction<string[]>>
 }
 
-const Header = ({ setSearchTermValue, isLoggedIn, setIsLoggedIn }: HeaderProps) => {
+const Header = ({ setSearchTermValue, accessToken, setAccessToken}: HeaderProps) => {
   const [position, setPosition] = useState(window.scrollY)
   const [isVisible, setIsVisible] = useState(true)
 
   const handleLogout = () => {
+    setAccessToken('')
     deleteLocalStorage()
-    setIsLoggedIn(false)
   }
 
   useEffect(() => {
@@ -43,18 +43,18 @@ const Header = ({ setSearchTermValue, isLoggedIn, setIsLoggedIn }: HeaderProps) 
         className={styles['header-container']}
         style={{ visibility: isVisible ? 'visible' : 'hidden' }}
       >
-        {isLoggedIn && (
+        {accessToken && (
           <div className={styles['header-left']}>
             <Search setSearchTermValue={setSearchTermValue} />
           </div>
         )}
         <NavLink to='login'>
-          {isLoggedIn && (
+          {accessToken && (
             <button className={styles['login-btn']} type='button' onClick={handleLogout}>
               LOGOUT
             </button>
           )}
-          {!isLoggedIn && (
+          {!accessToken && (
             <button className={styles['login-btn']} type='button'>
               LOGIN
             </button>
