@@ -34,17 +34,21 @@ const EditBookForm = ({ book, setIsEditModalOpened }: EditBookFormProps) => {
     PublishDate: book.PublishDate,
     Authors: book.Authors,
   })
+  const [ selectedAuthors, setSelectedAuthors ] = useState<Author[]>([])
 
   useEffect(() => {
-    console.log(formData)
     try {
       fetchAuthorsData()
     } catch (error) {
        toast.error('No authors to show')
     }
   }, [cover])
+  
+  const openFormhandler = () => {
+    setIsAuthorFormOpen(!isAuthorFormOpen)
+  }
 
-  const convertModel = (authors: AuthorBookDetails[]): Author[] => {
+    const convertModel = (authors: AuthorBookDetails[]): Author[] => {
     return authors.map((author) => {
       return {
         Id: author.Id,
@@ -54,10 +58,6 @@ const EditBookForm = ({ book, setIsEditModalOpened }: EditBookFormProps) => {
     })
   }
   
-  const openFormhandler = () => {
-    setIsAuthorFormOpen(!isAuthorFormOpen)
-  }
-
   const handleFileChange = ({ currentTarget }: FormEvent<HTMLInputElement>) => {
     const files = currentTarget.files
     const reader = new FileReader()
@@ -92,7 +92,9 @@ const EditBookForm = ({ book, setIsEditModalOpened }: EditBookFormProps) => {
       form.append('PublishDate', formData.PublishDate)
       form.append('Quantity', formData.Quantity.toString())
       form.append('Title', formData.Title)
-      formData.Authors.forEach((author) => form.append('AuthorIds', author.Id.toString()))      
+      selectedAuthors.forEach((author) => {
+        form.append('AuthorIds', author.Id.toString())
+      })
       await putBookRequest(form)
       toast.success(`${formData.Title} successfully edited`)
       setIsEditModalOpened(false)
@@ -104,7 +106,7 @@ const EditBookForm = ({ book, setIsEditModalOpened }: EditBookFormProps) => {
   }
 
   const onChangeAuthors = (newAuthors: MultiValue<Author>) => {
-    setFormData((prev) => ({ ...prev, AuthorIds: newAuthors.map((authors) => authors) }))
+    setSelectedAuthors(newAuthors.map(author => author))
   }
 
   const addAuthorHandler = (event: React.FormEvent<HTMLFormElement>) => {
@@ -116,8 +118,6 @@ const EditBookForm = ({ book, setIsEditModalOpened }: EditBookFormProps) => {
       form.append('LastName', authorForm.LastName)
       postAuthor(form)
       toast.success(`Author ${authorForm.FirstName} ${authorForm.LastName} successfully added`)
-      
-
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         toast.error(`${error}`)
