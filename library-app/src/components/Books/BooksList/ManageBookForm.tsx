@@ -33,7 +33,7 @@ const ManageBookForm = () => {
     try {
       fetchAuthorsData()
     } catch (error) {
-      console.error(error)
+      toast.error(`${error}`)
     }
   }, [])
 
@@ -73,10 +73,10 @@ const ManageBookForm = () => {
       formData.AuthorIds.forEach((author) => form.append('AuthorIds', author.Id.toString()))
 
       await postBookRequest(form)
-      toast(`${formData.Quantity} copies of ${formData.Title} is successfully created`)
+      toast.success(`${formData.Quantity} copies of ${formData.Title} is successfully created`)
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        toast('Authorization needed')
+        toast.error('Authorization needed')
       }
     }
   }
@@ -93,10 +93,10 @@ const ManageBookForm = () => {
       form.append('FirstName', authorForm.FirstName)
       form.append('LastName', authorForm.LastName)
       postAuthor(form)
-      toast(`Author ${authorForm.FirstName} ${authorForm.LastName} successfully added`)
+      toast.success(`Author ${authorForm.FirstName} ${authorForm.LastName} successfully added`)
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        toast('Authorization needed')
+        toast.error('Authorization needed')
       }
     }
   }

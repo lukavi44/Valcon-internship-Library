@@ -30,7 +30,6 @@ const Homepage = ({ search, filter, sort, accessToken }: HomepageProps) => {
       resetPaging()
     }
     fetchBooks(page.pageNumber, page.pageLength, search, filter, sort)
-    console.log(page.pageNumber)
   }, [page.pageNumber, page.pageLength, search])
 
   const fetchBooks = (
