@@ -1,6 +1,9 @@
-export const convertDateToString = (date: string) => {
-  const parts = date.split('-')
-  const parts2 = parts[2].split('T')
-  const mydate = new Date(+parts[0], +parts[1] - 1, +parts2[0])
-  return new Intl.DateTimeFormat('sr-RS').format(new Date(mydate))
+export const convertDateToString = (date: string, format: 'yyyy-MM-dd' | 'dd.MM.yyyy') => {
+  const parts = date.split('T')
+  const dashSplit = parts[0].split('-')
+  const year = dashSplit[0]
+  const month = dashSplit[1].padStart(2, '0')
+  const day = dashSplit[2].padStart(2, '0')
+  const mydate = (format === 'yyyy-MM-dd') ? (`${year}-${month}-${day}`) : (`${day}.${month}.${year}`)
+  return mydate
 }

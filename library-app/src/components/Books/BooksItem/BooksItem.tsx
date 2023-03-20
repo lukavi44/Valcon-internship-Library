@@ -26,7 +26,7 @@ export interface BookProps {
           <h2>{Book.Title}</h2>
           <div className={styles['published-date']}>
             <p>Published:</p>
-            {Book.PublishDate ? <p>{convertDateToString(Book.PublishDate)}</p> : ''}
+            {Book.PublishDate ? <p>{convertDateToString(Book.PublishDate, 'dd.MM.yyyy')}</p> : ''}
           </div>
           <p>
             {Book.Description?.substring(0, 50)}
