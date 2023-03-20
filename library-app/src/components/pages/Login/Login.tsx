@@ -6,11 +6,10 @@ import LoginRequest, { LoginRequestData } from '../../../services/auth'
 import styles from './Login.module.css'
 
 interface Props {
-  setIsLoggedIn: Dispatch<SetStateAction<boolean>>
   setAccessToken: Dispatch<SetStateAction<string | null>>
 }
 
-const Login = ({ setIsLoggedIn, setAccessToken }: Props) => {
+const Login = ({  setAccessToken }: Props) => {
   const [enteredEmail, setEnteredEmail] = useState('')
   const [enteredEmailIsValid, setEnteredEmailIsValid] = useState(true)
 
@@ -51,7 +50,6 @@ const Login = ({ setIsLoggedIn, setAccessToken }: Props) => {
 
     LoginRequest(formData)
       .then(({ data }) => {
-        setIsLoggedIn(true)
         setAccessToken(data.AccessToken)
         setLocalStorage(data)
         navigateTo('/')

@@ -8,10 +8,10 @@ import Modal from '../Layout/Modal'
 import ManageBookForm from '../Books/BooksList/ManageBookForm'
 
 interface FooterProps {
-  isLoggedIn: boolean
+  accessToken: string | null
 }
 
-export const Footer = ({ isLoggedIn }: FooterProps) => {
+export const Footer = ({ accessToken }: FooterProps) => {
   const [adminOptions, setAdminOptions] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -33,7 +33,7 @@ export const Footer = ({ isLoggedIn }: FooterProps) => {
         </button>
       </div>
 
-      {isLoggedIn && (
+      {accessToken && (
         <div className={styles['btn-holder']}>
           <button>
             <img src={account} alt='' />

@@ -4,13 +4,12 @@ import styles from './BooksItem.module.css'
 import imgPlaceholder from '../../../assets/placeholderImg/placeholder.jpeg'
 import { useNavigate } from 'react-router-dom'
 import { convertDateToString } from '../../../helpers/convertDate.helpers'
-
 export interface BookProps {
   Book: BookResponse
-  isLoggedIn: boolean
+  accessToken: string | null
 }
 
-const BooksItem = ({ Book, isLoggedIn }: BookProps) => {
+  const BooksItem = ({ Book }: BookProps) => {
   const navigate = useNavigate()
 
   return (

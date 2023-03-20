@@ -4,10 +4,10 @@ import { BookResponse } from '../../../models/bookData.model'
 
 interface BookListProps {
   booksProps: BookResponse[]
-  isLoggedIn: boolean
+  accessToken: string | null
 }
 
-const BooksList = ({ booksProps, isLoggedIn }: BookListProps) => {
+const BooksList = ({ booksProps, accessToken }: BookListProps) => {
   return (
     <div className={styles.wrapp}>
       <div className={styles['books-wrap']}>
@@ -15,7 +15,7 @@ const BooksList = ({ booksProps, isLoggedIn }: BookListProps) => {
           <p>No available books</p>
         ) : (
           booksProps &&
-          booksProps.map((book) => <BooksItem isLoggedIn={isLoggedIn} key={book.Id} Book={book} />)
+          booksProps.map((book) => <BooksItem accessToken={accessToken} key={book.Id} Book={book} />)
         )}
       </div>
     </div>

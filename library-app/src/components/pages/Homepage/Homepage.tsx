@@ -1,7 +1,7 @@
 import {  useEffect, useRef, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { PageData } from '../../../models/page.model'
-import { BookResponse } from '../../../models/bookData.model'
+import {  BookResponse } from '../../../models/bookData.model'
 import Where from '../../../models/where.model'
 import { getBooksRequest } from '../../../services/BooksServices'
 import BooksList from '../../Books/BooksList/BooksList'
@@ -11,10 +11,10 @@ interface HomepageProps {
   search: string
   filter: Where[]
   sort: string[]
-  isLoggedIn: boolean
+  accessToken: string | null
 }
 
-const Homepage = ({ search, filter, sort, isLoggedIn }: HomepageProps) => {
+const Homepage = ({ search, filter, sort, accessToken }: HomepageProps) => {
   const [books, setBooks] = useState<BookResponse[]>([])
   const [page, setPage] = useState<PageData>({
     pageLength: 9,
@@ -97,7 +97,7 @@ const Homepage = ({ search, filter, sort, isLoggedIn }: HomepageProps) => {
           }
           scrollableTarget='homepage'
         >
-          <BooksList isLoggedIn={isLoggedIn} booksProps={books} />
+          <BooksList accessToken={accessToken} booksProps={books} />
         </InfiniteScroll>
       ) : (
         <div className={styles['lds-spinner']}>

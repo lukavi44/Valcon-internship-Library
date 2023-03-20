@@ -2,17 +2,17 @@ import { FormEvent, useCallback, useEffect, useState } from 'react'
 import Select, { MultiValue } from 'react-select'
 import axios from 'axios'
 import {  Author, AuthorBookDetails, AuthorPost } from '../../../models/author.model'
-import { BookDetailsRequest } from '../../../models/bookData.model'
+import {  BookDetailsRequest, BookResponse } from '../../../models/bookData.model'
 import { getAuthors, postAuthor } from '../../../services/AuthorServices'
 import { putBookRequest } from '../../../services/BooksServices'
 import styles from './ManageBookForm.module.css'
 
 interface EditBookFormProps {
-  book: BookDetailsRequest
+  book: BookResponse | BookDetailsRequest
 }
 
 const EditBookForm = ({ book }: EditBookFormProps) => {
-  const [authors, setAuthors] = useState<AuthorBookDetails[]>([])
+  const [authors, setAuthors] = useState<Author[]>([])
   const [isAuthorFormOpen, setIsAuthorFormOpen] = useState(false)
   const [requestCover, setRequestCover] = useState<Blob>(new Blob())
   const [cover, setCover] = useState('')
@@ -29,7 +29,7 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
     Quantity: book.Quantity,
     Cover: book.Cover,
     PublishDate: book.PublishDate,
-    Authors: book.Authors,
+    Authors: book.Authors as unknown as AuthorBookDetails[],
   })
 
   useEffect(() => {
@@ -39,6 +39,17 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
        console.error('nema autora', error)
     }
   }, [cover])
+
+
+  const convertModel = (authors: AuthorBookDetails[]): Author[] => {
+    return authors.map((author) => {
+      return {
+        Id: author.Id,
+        FirstName: author.Firstname,
+        LastName: author.Lastname
+      }
+    })
+  }
   
   const openFormhandler = () => {
     setIsAuthorFormOpen(!isAuthorFormOpen)
@@ -84,7 +95,7 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
     }
   }
 
-  const onChangeAuthors = (newAuthors: MultiValue<AuthorBookDetails>) => {
+  const onChangeAuthors = (newAuthors: MultiValue<Author>) => {
     setFormData((prev) => ({ ...prev, AuthorIds: newAuthors.map((authors) => authors) }))
   }
 
@@ -174,11 +185,11 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
                 name='authorIds'
                 id='authorIds'
                 options={authors}
-                defaultValue={formData.Authors}
-                getOptionLabel={(option) => `${option.Firstname} ${option.Lastname}`}
+                defaultValue={convertModel(formData.Authors)}
+                getOptionLabel={(option) => `${option.FirstName} ${option.LastName}`}
                 onChange={onChangeAuthors}
                 isMulti
-                getOptionValue={(option: AuthorBookDetails) => option.Id.toString()}
+                getOptionValue={(option: Author) => option.Id.toString()}
               />
               {!isAuthorFormOpen && (
                 <button onClick={openFormhandler} className={styles['add-btn']}>
