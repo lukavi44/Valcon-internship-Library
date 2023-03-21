@@ -1,6 +1,7 @@
 import { MouseEventHandler } from 'react'
 import { BookDetailsRequest } from '../../models/bookData.model'
-import styles from './RentDialog.module.css'
+import styles from './DeleteDialog.module.css'
+import check from '../../assets/icons/check.png'
 
 interface RentDialogProps {
   book: BookDetailsRequest
@@ -10,7 +11,9 @@ interface RentDialogProps {
 
 export const RentDialog = ({book, closeRentDialog, rentBook}:RentDialogProps) => {
     return (
-     <div className={styles.container}>
+      <div className={styles.container}>
+      <img src={check} className={styles['action-icon']} style={{background: '#d9b99b'}} />
+        
       <h2>
         Are you sure you want to rent <span className={styles['book-title']}>{book.Title}</span>
       </h2>

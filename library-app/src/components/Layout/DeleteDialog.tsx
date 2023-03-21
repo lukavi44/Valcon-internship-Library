@@ -12,7 +12,7 @@ interface DeleteDialogProps {
 const DeleteDialog = ({ book, closeDeleteDialog, deleteBook }: DeleteDialogProps) => {
   return (
     <div className={styles.container}>
-      <img src={deleteIcon} className={styles['delete-icon']} />
+      <img src={deleteIcon} className={styles['action-icon']} />
       <h2>
         Are you sure you want to delete <span className={styles['book-title']}>{book.Title}</span>
       </h2>
