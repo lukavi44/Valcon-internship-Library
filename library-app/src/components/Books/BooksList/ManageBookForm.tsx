@@ -189,7 +189,7 @@ const ManageBookForm = () => {
       </form>
       {isAuthorFormOpen && (
         <form onSubmit={addAuthorHandler} className={styles['add-author-form']}>
-          <button onClick={() => setIsAuthorFormOpen(false)} type='button'>
+          <button onClick={() => setIsAuthorFormOpen(false)} type='button' className={styles['close-btn']}>
             x
           </button>
           <h2>Add New Author</h2>
