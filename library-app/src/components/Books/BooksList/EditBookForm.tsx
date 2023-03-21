@@ -126,7 +126,6 @@ const EditBookForm = ({ book, setIsEditModalOpened }: EditBookFormProps) => {
 
   const onChangeAuthors = (newAuthors: MultiValue<Author>) => {
     setSelectedAuthors([...newAuthors])
-    // setSelectedAuthors(newAuthors.map((author) => newAuthors: [...formData.Authors, author]))
   }
 
   const addAuthorHandler = (event: React.FormEvent<HTMLFormElement>) => {
