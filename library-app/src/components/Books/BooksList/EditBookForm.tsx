@@ -42,10 +42,15 @@ const EditBookForm = ({ book, setIsEditModalOpened }: EditBookFormProps) => {
     } catch (error) {
        toast.error('No authors to show')
     }
-    if (book.Cover) {
-      setRequestCover(base64ToBlob(`data:image/png;base64, ${book.Cover}`))
-    }
+  }, [authors])
+
+  useEffect(() => { 
+    setRequestCover(base64ToBlob(`data:image/png;base64, ${book.Cover}`))
   }, [cover])
+  
+  useEffect(() => {
+    setSelectedAuthors(book.Authors as unknown as Author[])
+  }, [])
   
   const openFormhandler = () => {
     setIsAuthorFormOpen(!isAuthorFormOpen)
@@ -120,7 +125,8 @@ const EditBookForm = ({ book, setIsEditModalOpened }: EditBookFormProps) => {
   }
 
   const onChangeAuthors = (newAuthors: MultiValue<Author>) => {
-    setSelectedAuthors(newAuthors.map(author => author))
+    setSelectedAuthors([...newAuthors])
+    // setSelectedAuthors(newAuthors.map((author) => newAuthors: [...formData.Authors, author]))
   }
 
   const addAuthorHandler = (event: React.FormEvent<HTMLFormElement>) => {
@@ -145,7 +151,7 @@ const EditBookForm = ({ book, setIsEditModalOpened }: EditBookFormProps) => {
         <div className={styles['form-group-column']}>
           <img
             className={styles['upload-img']}
-            src={book.Cover ? `data:image/png;base64, ${book.Cover}` : cover}
+            src={cover ? cover : `data:image/png;base64, ${book.Cover}`}
             alt='Book Cover'
           />
            <input id='cover' name='cover' type='file' onChange={handleFileChange} />

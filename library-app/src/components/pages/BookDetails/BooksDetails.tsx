@@ -31,7 +31,7 @@ const BookDetails = () => {
 
   useEffect(() => {    
     fetchBook()
-  }, [setBookDetails])
+  }, [bookDetails])
   
   const fetchBook = () => {
     if (!id) return
