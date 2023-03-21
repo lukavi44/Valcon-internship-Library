@@ -36,7 +36,7 @@
   padding: 1rem;
 }
 .upload-img {
-  height: 100px;
+  height: 125px;
 }
 
 .select-authors-dropdown {
@@ -69,4 +69,36 @@
   flex-direction: column;
   width: 50%;
   gap: 5rem;
+}
+
+@media screen and (max-width: 426px) {
+  .form-group-column {
+    padding: 0 2.2rem;
+  }
+  .form-wrapper{
+    padding: 1rem 2rem;
+  }
+
+  .bottom {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .left, .right {
+    width: 100% ;
+    gap: 2rem
+  }
+
+  .add-author-form {
+    align-items: center;
+    padding: none;
+  }
+
+  .close-btn {
+    align-self: flex-end;
+  }
+
+  .add-btn {
+    align-self: center;
+  }
 }

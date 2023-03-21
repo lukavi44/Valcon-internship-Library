@@ -228,7 +228,7 @@ const EditBookForm = ({ book, setIsEditModalOpened }: EditBookFormProps) => {
       </form>
       {isAuthorFormOpen && (
         <form onSubmit={addAuthorHandler} className={styles['add-author-form']}>
-          <button onClick={() => setIsAuthorFormOpen(false)}>x</button>
+          <button onClick={() => setIsAuthorFormOpen(false)} className={styles['close-btn']} >x</button>
           <h2>Add New Author</h2>
           <div className={styles['form-group']}>
             <input
