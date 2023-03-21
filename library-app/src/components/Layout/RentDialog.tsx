@@ -1,6 +1,6 @@
 import { MouseEventHandler } from 'react'
 import { BookDetailsRequest } from '../../models/bookData.model'
-import styles from './DeleteDialog.module.css'
+import styles from './Dialogs.module.css'
 import check from '../../assets/icons/check.png'
 
 interface RentDialogProps {

@@ -1,4 +1,4 @@
-import styles from './DeleteDialog.module.css'
+import styles from './Dialogs.module.css'
 import deleteIcon from '../../assets/icons/delete.png'
 import { MouseEventHandler } from 'react'
 import { BookDetailsRequest } from '../../models/bookData.model'
