@@ -42,6 +42,9 @@ const EditBookForm = ({ book, setIsEditModalOpened }: EditBookFormProps) => {
     } catch (error) {
        toast.error('No authors to show')
     }
+    if (book.Cover) {
+      setRequestCover(base64ToBlob(`data:image/png;base64, ${book.Cover}`))
+    }
   }, [cover])
   
   const openFormhandler = () => {
@@ -56,6 +59,17 @@ const EditBookForm = ({ book, setIsEditModalOpened }: EditBookFormProps) => {
         LastName: author.Lastname
       }
     })
+    }
+  
+  const base64ToBlob = (base64Image: string): Blob => {
+    const parts = base64Image.split(';base64,')
+    const imageType = parts[0].split(':')[1]
+    const decodedData = window.atob(parts[1])
+    const uIntArray = new Uint8Array(decodedData.length)
+    for (let i = 0; i < decodedData.length; ++i) {
+      uIntArray[i] = decodedData.charCodeAt(i)
+    }
+    return new Blob([ uIntArray ], { type: imageType })
   }
   
   const handleFileChange = ({ currentTarget }: FormEvent<HTMLInputElement>) => {
@@ -66,7 +80,7 @@ const EditBookForm = ({ book, setIsEditModalOpened }: EditBookFormProps) => {
       setRequestCover(files[0])
       reader.onloadend = function () {
         const base64data = reader.result
-        if (base64data) setCover(base64data as string)
+        if (base64data) setCover(base64data as string)        
       }
     }
   }
@@ -83,7 +97,7 @@ const EditBookForm = ({ book, setIsEditModalOpened }: EditBookFormProps) => {
       if (formData.ISBN.trim() === '' || formData.Quantity === 0 || formData.Title.trim() === '') {
         toast.error('Quantity, ISBN and Title inputs must be filled')
         return
-        }
+      }
       const form = new FormData()
       form.append('Id', book.Id.toString())
       form.append('Cover', requestCover)
@@ -134,7 +148,7 @@ const EditBookForm = ({ book, setIsEditModalOpened }: EditBookFormProps) => {
             src={book.Cover ? `data:image/png;base64, ${book.Cover}` : cover}
             alt='Book Cover'
           />
-          <input id='cover' name='cover'  type='file'  onChange={handleFileChange} />
+           <input id='cover' name='cover' type='file' onChange={handleFileChange} />
         </div>
         <div className={styles.bottom}>
           <div className={styles.left}>

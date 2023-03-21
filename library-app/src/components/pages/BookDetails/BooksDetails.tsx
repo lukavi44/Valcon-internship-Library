@@ -29,7 +29,7 @@ const BookDetails = () => {
   const { id } = useParams()
   const navigate = useNavigate()
 
-  useEffect(() => {
+  useEffect(() => {    
     fetchBook()
   }, [setBookDetails])
   
