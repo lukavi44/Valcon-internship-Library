@@ -1,0 +1,16 @@
+.book-holder {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.carousel-root {
+    display: flex;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.book-cover {
+object-fit: contain;
+}

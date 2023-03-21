@@ -4,6 +4,10 @@
   padding: 2rem 0;
 }
 
+.top {
+  display: flex;
+}
+
 .lds-spinner {
   color: official;
   display: inline-block;

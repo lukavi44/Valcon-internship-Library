@@ -6,6 +6,7 @@ import Where from '../../../models/where.model'
 import { getBooksRequest } from '../../../services/BooksServices'
 import BooksList from '../../Books/BooksList/BooksList'
 import styles from './Homepage.module.css'
+import BookCarousel from '../../UI/BookCarousel'
 
 interface HomepageProps {
   search: string
@@ -73,6 +74,10 @@ const Homepage = ({ search, filter, sort, accessToken }: HomepageProps) => {
 
   return (
     <div id='homepage' className={styles.homepage}>
+      <div className={styles.top}>
+      {/* <h1 className={styles['carousel-title']}>Top 10 most rented books</h1> */}
+      <BookCarousel />
+      </div>
       {books.length > 0 ? (
         <InfiniteScroll
           dataLength={books.length}
