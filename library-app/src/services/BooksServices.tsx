@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { BookRequest, BookItemList, BookResponse, BookDetailsRequest } from '../models/bookData.model'
+import { BookRequest, BookItemList, BookDetailsRequest } from '../models/bookData.model'
 import Where from '../models/where.model'
 import axiosInstance from './axiosConfig'
 
