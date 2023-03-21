@@ -10,6 +10,10 @@ import { BookDetailsRequest } from '../../../models/bookData.model'
 import { convertDateToString } from '../../../helpers/convertDate.helpers'
 import styles from './BookDetails.module.css'
 import placeholder from '../../../assets/placeholderImg/placeholder.jpeg'
+import RentDialog from '../../Layout/RentDialog';
+import { getBookHistory, postRentBook, postReturnBook } from '../../../services/RentalServices.services';
+import RentHistoryDialog from '../../Layout/RentHistoryDialog';
+import { RentBookHistory } from '../../../models/rent.model';
 
 
 const BookDetails = () => {
@@ -26,24 +30,32 @@ const BookDetails = () => {
   })
   const [isEditModalOpened, setIsEditModalOpened] = useState(false)
   const [isDeleteModalOpened, setIsDeleteModalOpened] = useState(false)
+  const [isRentModalOpened, setIsRentModalOpened] = useState(false)
+  const [isRentHistoryModalOpened, setIsRentHistoryModalOpened] = useState(false)
+  const [rentalHistoryData, setRentalHistoryData] = useState<RentBookHistory[]>([])
   const { id } = useParams()
   const navigate = useNavigate()
 
   useEffect(() => {    
     fetchBook()
-  }, [bookDetails])
+  }, [])
   
   const fetchBook = () => {
     if (!id) return
     getOneBook(parseInt(id))
       .then((response) => {
         setBookDetails(response.data)
+        getBookRentHistory(response.data.Id)
       })
       .catch((error) => toast.error(error))
   }
 
   const onCloseDeleteDialog = () => {
     setIsDeleteModalOpened(false)
+  }
+
+  const onCloseRentDialog = () => {
+    setIsRentModalOpened(false)
   }
 
   const deleteBookHandler = () => {
@@ -53,6 +65,34 @@ const BookDetails = () => {
         navigate('/')
       })
       .catch((error) => toast.error( `${error} / Something went wrong. Book has NOT been deleted`))
+  }
+
+  const rentBookHandler = () => {
+    postRentBook(bookDetails.Id).then(() => {
+      toast.success(`${bookDetails.Title} has been successfully rented`)
+      fetchBook()
+      setIsRentModalOpened(false)
+    })
+    .catch(() => toast.error( 'No more available books for renting. Book has NOT been rented'))
+  }
+
+  const getBookRentHistory = (bookId: number) => {
+    getBookHistory(bookId).then((response) => {
+      setRentalHistoryData(response.data)
+    })
+  }
+
+  const returnBookHandler = (rentId: number) => {
+    if (bookDetails.Quantity === bookDetails.Available) {
+      toast.error(`All copies of ${bookDetails.Title} have been returned`)
+      return
+    }
+    postReturnBook(rentId).then(() => {
+      toast.success(`${bookDetails.Title} has been returned`)
+      getBookRentHistory(bookDetails.Id)
+    }).catch(() => {
+      toast.error(`This copy of ${bookDetails.Title} has already been returned`)
+    })
   }
 
   return (
@@ -105,7 +145,7 @@ const BookDetails = () => {
         </button>
         {isEditModalOpened && (
           <Modal onClose={() => setIsEditModalOpened(false)}>
-            <EditBookForm setIsEditModalOpened={setIsEditModalOpened} book={bookDetails} />
+            <EditBookForm fetchUpdatedBook={fetchBook} setIsEditModalOpened={setIsEditModalOpened} setBookDetails={setBookDetails} book={bookDetails} />
           </Modal>
         )}
         <button
@@ -125,9 +165,32 @@ const BookDetails = () => {
             />
           </Modal>
         )}
-        <button style={{ background: '#fff0db' }} className={styles['action-btn']} id={styles.rent}>
+        <button
+          style={{ background: '#fff0db' }}
+          className={styles['action-btn']}
+          id={styles.rent}
+          onClick={() => setIsRentModalOpened(true)}>
           Rent
         </button>
+          {isRentModalOpened && (
+            <Modal onClose={() => setIsRentModalOpened(false)}>
+            <RentDialog
+              closeRentDialog={onCloseRentDialog}
+              rentBook={rentBookHandler}
+              book={bookDetails}
+            />
+          </Modal>
+        )}
+        <button onClick={() => setIsRentHistoryModalOpened(true)} className={styles['action-btn']}  style={{ background: '#eed9c4' }} >View History of Rentals</button>
+        {isRentHistoryModalOpened && (
+            <Modal onClose={() => setIsRentHistoryModalOpened(false)}>
+            <RentHistoryDialog
+              book={bookDetails}
+              rentalHistoryData={rentalHistoryData}
+              returnBook={returnBookHandler}
+            />
+          </Modal>
+        )}
       </div>
     </div>
   )

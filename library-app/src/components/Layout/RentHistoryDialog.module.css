@@ -1,0 +1,16 @@
+.table-wrapper {
+    padding: 4rem;
+    display: flex;
+    gap: 2rem;
+    flex-direction: column;
+}
+
+th, td {
+    padding: 6px;
+    text-align: center;
+}
+
+.return-btn {
+    padding: 0.5rem 1rem;
+    background: #d9b99b;
+}

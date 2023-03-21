@@ -1,7 +1,7 @@
-import styles from './DeleteDialog.module.css'
+import styles from './Dialogs.module.css'
 import deleteIcon from '../../assets/icons/delete.png'
 import { MouseEventHandler } from 'react'
-import { BookDetailsRequest, BookResponse } from '../../models/bookData.model'
+import { BookDetailsRequest } from '../../models/bookData.model'
 
 interface DeleteDialogProps {
   book: BookDetailsRequest
@@ -12,7 +12,7 @@ interface DeleteDialogProps {
 const DeleteDialog = ({ book, closeDeleteDialog, deleteBook }: DeleteDialogProps) => {
   return (
     <div className={styles.container}>
-      <img src={deleteIcon} className={styles['delete-icon']} />
+      <img src={deleteIcon} className={styles['action-icon']} />
       <h2>
         Are you sure you want to delete <span className={styles['book-title']}>{book.Title}</span>
       </h2>

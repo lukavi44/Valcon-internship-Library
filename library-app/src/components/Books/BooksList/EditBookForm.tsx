@@ -12,9 +12,11 @@ import { convertDateToString } from '../../../helpers/convertDate.helpers'
 interface EditBookFormProps {
   book: BookDetailsRequest
   setIsEditModalOpened: Dispatch<SetStateAction<boolean>>
+  setBookDetails: Dispatch<React.SetStateAction<BookDetailsRequest>>
+  fetchUpdatedBook: () => void
 }
 
-const EditBookForm = ({ book, setIsEditModalOpened }: EditBookFormProps) => {
+const EditBookForm = ({ book, setIsEditModalOpened, setBookDetails, fetchUpdatedBook }: EditBookFormProps) => {
   const [authors, setAuthors] = useState<Author[]>([])
   const [isAuthorFormOpen, setIsAuthorFormOpen] = useState(false)
   const [requestCover, setRequestCover] = useState<Blob>(new Blob())
@@ -116,6 +118,8 @@ const EditBookForm = ({ book, setIsEditModalOpened }: EditBookFormProps) => {
       })
       await putBookRequest(form)
       toast.success(`${formData.Title} successfully edited`)
+      setBookDetails(formData)
+      fetchUpdatedBook()
       setIsEditModalOpened(false)
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {

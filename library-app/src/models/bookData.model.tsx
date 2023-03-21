@@ -38,15 +38,3 @@ export interface BookDetailsRequest {
   PublishDate: string
   Authors: AuthorBookDetails[]
 }
-
-export interface BookISBN {
-  Id: number
-  Title: string
-  Available: number
-  Description: string
-  ISBN: string
-  Quantity: number
-  Cover: string
-  PublishDate: string
-  Authors: AuthorBookDetails[]
-}
