@@ -14,6 +14,8 @@ import RentDialog from '../../Layout/RentDialog';
 import { getBookHistory, postRentBook, postReturnBook } from '../../../services/RentalServices.services';
 import RentHistoryDialog from '../../Layout/RentHistoryDialog';
 import { RentBookHistory } from '../../../models/rent.model';
+import { currentUserAdmin } from '../../../helpers/roles';
+import { getAccessToken } from '../../../helpers/manageLocalStorage';
 
 
 const BookDetails = () => {
@@ -133,16 +135,19 @@ const BookDetails = () => {
         </div>
       </div>
       <div className={styles['actions-btn-holder']}>
-        <button
+        {
+          currentUserAdmin(getAccessToken() || '') &&
+          <button
           style={{ background: '#d9b99b' }}
           className={styles['action-btn']}
           id={styles.edit}
           onClick={() => {
             setIsEditModalOpened(true)
           }}
-        >
+          >
           Edit
         </button>
+        }
         {isEditModalOpened && (
           <Modal onClose={() => setIsEditModalOpened(false)}>
             <EditBookForm fetchUpdatedBook={fetchBook} setIsEditModalOpened={setIsEditModalOpened} setBookDetails={setBookDetails} book={bookDetails} />

@@ -2,6 +2,7 @@ export interface LocalStorageTokens {
   AccessToken: string
   RefreshToken: string
   Expiration: string
+  Role?: string 
 }
 
 const accessTokenKey = 'accessToken'
