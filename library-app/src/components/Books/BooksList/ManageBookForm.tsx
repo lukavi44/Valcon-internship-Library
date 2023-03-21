@@ -3,10 +3,11 @@ import Select, { MultiValue } from 'react-select'
 import axios from 'axios'
 import { postBookRequest } from '../../../services/BooksServices'
 import { getAuthors, postAuthor } from '../../../services/AuthorServices'
-import { BookRequest } from '../../../models/bookData.model'
 import { Author, AuthorPost } from '../../../models/author.model'
+import { BookRequest } from '../../../models/bookData.model'
 import placeholder from '../../../assets/placeholderImg/placeholder.jpeg'
 import styles from './ManageBookForm.module.css'
+import { toast } from 'react-toastify'
 
 const ManageBookForm = () => {
   const [authors, setAuthors] = useState<Author[]>([])
@@ -32,7 +33,7 @@ const ManageBookForm = () => {
     try {
       fetchAuthorsData()
     } catch (error) {
-      console.error(error)
+      toast.error(`${error}`)
     }
   }, [])
 
@@ -72,9 +73,10 @@ const ManageBookForm = () => {
       formData.AuthorIds.forEach((author) => form.append('AuthorIds', author.Id.toString()))
 
       await postBookRequest(form)
+      toast.success(`${formData.Quantity} copies of ${formData.Title} is successfully created`)
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        console.error('neautorizovan')
+        toast.error('Authorization needed')
       }
     }
   }
@@ -91,9 +93,10 @@ const ManageBookForm = () => {
       form.append('FirstName', authorForm.FirstName)
       form.append('LastName', authorForm.LastName)
       postAuthor(form)
+      toast.success(`Author ${authorForm.FirstName} ${authorForm.LastName} successfully added`)
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        console.error('neautorizovan')
+        toast.error('Authorization needed')
       }
     }
   }
@@ -186,7 +189,7 @@ const ManageBookForm = () => {
       </form>
       {isAuthorFormOpen && (
         <form onSubmit={addAuthorHandler} className={styles['add-author-form']}>
-          <button onClick={() => setIsAuthorFormOpen(false)} type='button'>
+          <button onClick={() => setIsAuthorFormOpen(false)} type='button' className={styles['close-btn']}>
             x
           </button>
           <h2>Add New Author</h2>

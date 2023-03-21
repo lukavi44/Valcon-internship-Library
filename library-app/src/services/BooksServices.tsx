@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { BookRequest, BookItemList } from '../models/bookData.model'
+import { BookRequest, BookItemList, BookDetailsRequest } from '../models/bookData.model'
 import Where from '../models/where.model'
 import axiosInstance from './axiosConfig'
 
@@ -56,4 +56,8 @@ export const getBooksRequest = ({
 
 export const removeBookRequest = (id: number) => {
   return axiosInstance.delete(`api/Books/${id}`)
+}
+
+export const getOneBook = (id: number): Promise<AxiosResponse<BookDetailsRequest>> => {
+  return axiosInstance.get<BookDetailsRequest>(`api/Books/${id}`)
 }

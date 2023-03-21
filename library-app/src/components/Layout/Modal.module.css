@@ -14,7 +14,6 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #fff;
-  padding: 50px;
   z-index: 1000;
 }
 
@@ -22,10 +21,5 @@
   position: fixed;
   top: 0;
   right: 0;
-}
-
-@media screen and (min-width: 426px) {
-  .modal {
-    width: 50%;
-  }
+  z-index: 1;
 }

@@ -1,6 +1,7 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
+import {  useEffect, useRef, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { BookResponse } from '../../../models/bookData.model'
+import { PageData } from '../../../models/page.model'
+import {  BookResponse } from '../../../models/bookData.model'
 import Where from '../../../models/where.model'
 import { getBooksRequest } from '../../../services/BooksServices'
 import BooksList from '../../Books/BooksList/BooksList'
@@ -10,15 +11,17 @@ interface HomepageProps {
   search: string
   filter: Where[]
   sort: string[]
-  books: BookResponse[]
-  setBooks: Dispatch<SetStateAction<BookResponse[]>>
   accessToken: string | null
 }
 
-const Homepage = ({ books, setBooks, search, filter, sort, accessToken }: HomepageProps) => {
-  const [pageNumber, setPageNumber] = useState(1)
+const Homepage = ({ search, filter, sort, accessToken }: HomepageProps) => {
+  const [books, setBooks] = useState<BookResponse[]>([])
+  const [page, setPage] = useState<PageData>({
+    pageLength: 9,
+    pageNumber: 1,
+    totalCount: 0,
+  })
   const [hasMoreBooks, setHasMoreBooks] = useState(true)
-  const pageLength = 9
   const currentSearch = useRef<string>(search)
 
   useEffect(() => {
@@ -26,8 +29,8 @@ const Homepage = ({ books, setBooks, search, filter, sort, accessToken }: Homepa
       currentSearch.current = search
       resetPaging()
     }
-    fetchBooks(pageNumber, pageLength, search, filter, sort)
-  }, [pageNumber, search])
+    fetchBooks(page.pageNumber, page.pageLength, search, filter, sort)
+  }, [page.pageNumber, page.pageLength, search])
 
   const fetchBooks = (
     pageNumber: number,
@@ -49,12 +52,23 @@ const Homepage = ({ books, setBooks, search, filter, sort, accessToken }: Homepa
   }
 
   const resetPaging = () => {
+    setPage((prevPage) => {
+      return {
+        ...prevPage,
+        totalCount: 0,
+        pageNumber: 1,
+      }
+    })
     setBooks([])
-    setPageNumber(1)
   }
 
   const handleNextPage = () => {
-    setPageNumber((prevPageNumber) => prevPageNumber + 1)
+    setPage((page) => {
+      return {
+        ...page,
+        pageNumber: page.pageNumber + 1,
+      }
+    })
   }
 
   return (
@@ -80,7 +94,6 @@ const Homepage = ({ books, setBooks, search, filter, sort, accessToken }: Homepa
               <div></div>
             </div>
           }
-          endMessage={<h4 style={{ textAlign: 'center' }}>You have browsed all books</h4>}
           scrollableTarget='homepage'
         >
           <BooksList accessToken={accessToken} booksProps={books} />

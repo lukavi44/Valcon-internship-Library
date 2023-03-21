@@ -1,17 +1,20 @@
-import { FormEvent, useCallback, useEffect, useState } from 'react'
+import { Dispatch, FormEvent, SetStateAction, useCallback, useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 import Select, { MultiValue } from 'react-select'
 import axios from 'axios'
-import { Author, AuthorPost } from '../../../models/author.model'
-import { BookResponse } from '../../../models/bookData.model'
+import {  Author, AuthorBookDetails, AuthorPost } from '../../../models/author.model'
+import {  BookDetailsRequest } from '../../../models/bookData.model'
 import { getAuthors, postAuthor } from '../../../services/AuthorServices'
 import { putBookRequest } from '../../../services/BooksServices'
 import styles from './ManageBookForm.module.css'
+import { convertDateToString } from '../../../helpers/convertDate.helpers'
 
 interface EditBookFormProps {
-  book: BookResponse
+  book: BookDetailsRequest
+  setIsEditModalOpened: Dispatch<SetStateAction<boolean>>
 }
 
-const EditBookForm = ({ book }: EditBookFormProps) => {
+const EditBookForm = ({ book, setIsEditModalOpened }: EditBookFormProps) => {
   const [authors, setAuthors] = useState<Author[]>([])
   const [isAuthorFormOpen, setIsAuthorFormOpen] = useState(false)
   const [requestCover, setRequestCover] = useState<Blob>(new Blob())
@@ -20,29 +23,60 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
     FirstName: '',
     LastName: '',
   })
-  const [formData, setFormData] = useState<BookResponse>({
+  const [formData, setFormData] = useState<BookDetailsRequest>({
     Id: book.Id,
     Title: book.Title,
     Description: book.Description,
-    Isbn: book.Isbn,
+    ISBN: book.ISBN,
+    Available: book.Available,
     Quantity: book.Quantity,
     Cover: book.Cover,
     PublishDate: book.PublishDate,
     Authors: book.Authors,
   })
+  const [ selectedAuthors, setSelectedAuthors ] = useState<Author[]>([])
 
   useEffect(() => {
     try {
       fetchAuthorsData()
     } catch (error) {
-      console.error(error)
+       toast.error('No authors to show')
     }
-  }, [])
+  }, [authors])
 
+  useEffect(() => { 
+    setRequestCover(base64ToBlob(`data:image/png;base64, ${book.Cover}`))
+  }, [cover])
+  
+  useEffect(() => {
+    setSelectedAuthors(book.Authors as unknown as Author[])
+  }, [])
+  
   const openFormhandler = () => {
     setIsAuthorFormOpen(!isAuthorFormOpen)
   }
 
+    const convertModel = (authors: AuthorBookDetails[]): Author[] => {
+    return authors.map((author) => {
+      return {
+        Id: author.Id,
+        FirstName: author.Firstname,
+        LastName: author.Lastname
+      }
+    })
+    }
+  
+  const base64ToBlob = (base64Image: string): Blob => {
+    const parts = base64Image.split(';base64,')
+    const imageType = parts[0].split(':')[1]
+    const decodedData = window.atob(parts[1])
+    const uIntArray = new Uint8Array(decodedData.length)
+    for (let i = 0; i < decodedData.length; ++i) {
+      uIntArray[i] = decodedData.charCodeAt(i)
+    }
+    return new Blob([ uIntArray ], { type: imageType })
+  }
+  
   const handleFileChange = ({ currentTarget }: FormEvent<HTMLInputElement>) => {
     const files = currentTarget.files
     const reader = new FileReader()
@@ -51,7 +85,7 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
       setRequestCover(files[0])
       reader.onloadend = function () {
         const base64data = reader.result
-        if (base64data) setCover(base64data as string)
+        if (base64data) setCover(base64data as string)        
       }
     }
   }
@@ -65,26 +99,33 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
   const editBookHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     try {
+      if (formData.ISBN.trim() === '' || formData.Quantity === 0 || formData.Title.trim() === '') {
+        toast.error('Quantity, ISBN and Title inputs must be filled')
+        return
+      }
       const form = new FormData()
       form.append('Id', book.Id.toString())
       form.append('Cover', requestCover)
       form.append('Description', formData.Description)
-      form.append('Isbn', formData.Isbn)
+      form.append('Isbn', formData.ISBN)
       form.append('PublishDate', formData.PublishDate)
       form.append('Quantity', formData.Quantity.toString())
       form.append('Title', formData.Title)
-      formData.Authors.forEach((author) => form.append('Authors', author.Id.toString()))
-
+      selectedAuthors.forEach((author) => {
+        form.append('AuthorIds', author.Id.toString())
+      })
       await putBookRequest(form)
+      toast.success(`${formData.Title} successfully edited`)
+      setIsEditModalOpened(false)
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        console.error('neautorizovan')
+        toast.error('Authorization is needed')
       }
     }
   }
 
   const onChangeAuthors = (newAuthors: MultiValue<Author>) => {
-    setFormData((prev) => ({ ...prev, AuthorIds: newAuthors.map((authors) => authors) }))
+    setSelectedAuthors([...newAuthors])
   }
 
   const addAuthorHandler = (event: React.FormEvent<HTMLFormElement>) => {
@@ -95,9 +136,10 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
       form.append('FirstName', authorForm.FirstName)
       form.append('LastName', authorForm.LastName)
       postAuthor(form)
+      toast.success(`Author ${authorForm.FirstName} ${authorForm.LastName} successfully added`)
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        console.error('neautorizovan')
+        toast.error(`${error}`)
       }
     }
   }
@@ -108,10 +150,10 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
         <div className={styles['form-group-column']}>
           <img
             className={styles['upload-img']}
-            src={book.Cover ? `data:image/png;base64, ${book.Cover}` : cover}
+            src={cover ? cover : `data:image/png;base64, ${book.Cover}`}
             alt='Book Cover'
           />
-          <input id='cover' name='cover' type='file' onChange={handleFileChange} />
+           <input id='cover' name='cover' type='file' onChange={handleFileChange} />
         </div>
         <div className={styles.bottom}>
           <div className={styles.left}>
@@ -137,10 +179,10 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
             <div className={styles['form-group']}>
               <label htmlFor='isbn'>ISBN</label>
               <input
-                id='isbn'
-                name='isbn'
+                id='Isbn'
+                name='Isbn'
                 type='text'
-                defaultValue={formData.Isbn}
+                defaultValue={formData.ISBN}
                 onChange={(e) => setFormData((prev) => ({ ...prev, Isbn: e.target.value }))}
               />
             </div>
@@ -162,7 +204,7 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
                 id='publishDate'
                 name='publishDate'
                 type='date'
-                defaultValue={formData.PublishDate}
+                defaultValue={convertDateToString(formData.PublishDate, 'yyyy-MM-dd')}
                 onChange={(e) => setFormData((prev) => ({ ...prev, PublishDate: e.target.value }))}
               />
             </div>
@@ -173,7 +215,7 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
                 name='authorIds'
                 id='authorIds'
                 options={authors}
-                defaultValue={formData.Authors}
+                defaultValue={convertModel(formData.Authors)}
                 getOptionLabel={(option) => `${option.FirstName} ${option.LastName}`}
                 onChange={onChangeAuthors}
                 isMulti
@@ -191,7 +233,7 @@ const EditBookForm = ({ book }: EditBookFormProps) => {
       </form>
       {isAuthorFormOpen && (
         <form onSubmit={addAuthorHandler} className={styles['add-author-form']}>
-          <button onClick={() => setIsAuthorFormOpen(false)}>x</button>
+          <button onClick={() => setIsAuthorFormOpen(false)} className={styles['close-btn']} >x</button>
           <h2>Add New Author</h2>
           <div className={styles['form-group']}>
             <input

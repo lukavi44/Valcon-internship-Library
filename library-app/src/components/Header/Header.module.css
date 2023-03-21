@@ -1,7 +1,7 @@
 .header-container {
   width: 100%;
   display: flex;
-  background-color: #d9b97e;
+  background-color: #d9b99b;
   padding: 29px 0;
   justify-content: flex-end;
   gap: 1rem;
@@ -25,4 +25,21 @@
   color: #fff;
   border: none;
   font-size: 1.5rem;
+}
+
+@media screen and (max-width: 426px) {
+  .header-container {
+    padding: 1rem 0;
+    gap: 2rem;
+  }
+
+  .header-left {
+    justify-content: flex-end;
+  }
+
+  .login-btn {
+    font-size: 12px;
+    padding: 0;
+    padding-right: 1rem;
+  }
 }

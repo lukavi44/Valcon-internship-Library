@@ -1,6 +1,5 @@
 import {  useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { BookResponse } from '../../models/bookData.model'
 import Where from '../../models/where.model'
 import PrivateRoutes from '../../router/PrivateRoutes'
 import Footer from '../Footer/Footer'
@@ -12,7 +11,6 @@ import Sidebar from '../Sidebar/Sidebar'
 import styles from './MainLayout.module.css'
 
 const MainLayout = () => {
-  const [books, setBooks] = useState<BookResponse[]>([])
   const [accessToken, setAccessToken] = useState<string | null>(localStorage.getItem('accessToken'))
   const [searchTermValue, setSearchTermValue] = useState('')
   const [filter, setFilter] = useState<Where[]>([])
@@ -32,14 +30,12 @@ const MainLayout = () => {
 
         <Routes>
           <Route element={<PrivateRoutes accessToken={accessToken} />}>
-            <Route path='details' element={<BookDetails />} />
+            <Route path='BookDetails/:id' element={<BookDetails />} />
           </Route>
           <Route
             path='/'
             element={
               <Homepage
-                books={books}
-                setBooks={setBooks}
                 search={searchTermValue}
                 filter={filter}
                 sort={sort}

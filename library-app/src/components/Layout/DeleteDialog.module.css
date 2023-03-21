@@ -1,0 +1,32 @@
+.action-btns {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 4rem;
+  gap: 2rem;
+}
+
+.delete-icon {
+  position: absolute;
+  top: -24px;
+  right: 45%;
+  background: red;
+  border-radius: 52%;
+}
+
+.book-title {
+  font-size: 2rem;
+}
+
+.action-btn {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+
+}

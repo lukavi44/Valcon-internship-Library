@@ -1,4 +1,4 @@
-import { Author } from './author.model'
+import { Author, AuthorBookDetails } from './author.model'
 
 export interface BookItemList {
   items: BookResponse[]
@@ -19,10 +19,34 @@ export interface BookRequest {
 export interface BookResponse {
   Id: number
   Title: string
+  Available: number
   Description: string
   Isbn: string
   Quantity: number
   Cover: string
   PublishDate: string
   Authors: Author[]
+}
+export interface BookDetailsRequest {
+  Id: number
+  Title: string
+  Available: number
+  Description: string
+  ISBN: string
+  Quantity: number
+  Cover: string
+  PublishDate: string
+  Authors: AuthorBookDetails[]
+}
+
+export interface BookISBN {
+  Id: number
+  Title: string
+  Available: number
+  Description: string
+  ISBN: string
+  Quantity: number
+  Cover: string
+  PublishDate: string
+  Authors: AuthorBookDetails[]
 }
