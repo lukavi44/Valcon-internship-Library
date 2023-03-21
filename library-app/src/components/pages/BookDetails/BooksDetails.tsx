@@ -11,8 +11,9 @@ import { convertDateToString } from '../../../helpers/convertDate.helpers'
 import styles from './BookDetails.module.css'
 import placeholder from '../../../assets/placeholderImg/placeholder.jpeg'
 import RentDialog from '../../Layout/RentDialog';
-import { getBookHistory, postRentBook } from '../../../services/RentalServices.services';
+import { getBookHistory, postRentBook, postReturnBook } from '../../../services/RentalServices.services';
 import RentHistoryDialog from '../../Layout/RentHistoryDialog';
+import { RentBookHistory } from '../../../models/rent.model';
 
 
 const BookDetails = () => {
@@ -31,18 +32,20 @@ const BookDetails = () => {
   const [isDeleteModalOpened, setIsDeleteModalOpened] = useState(false)
   const [isRentModalOpened, setIsRentModalOpened] = useState(false)
   const [isRentHistoryModalOpened, setIsRentHistoryModalOpened] = useState(false)
+  const [rentalHistoryData, setRentalHistoryData] = useState<RentBookHistory[]>([])
   const { id } = useParams()
   const navigate = useNavigate()
 
   useEffect(() => {    
     fetchBook()
-  }, [bookDetails])
+  }, [])
   
   const fetchBook = () => {
     if (!id) return
     getOneBook(parseInt(id))
       .then((response) => {
         setBookDetails(response.data)
+        getBookRentHistory(response.data.Id)
       })
       .catch((error) => toast.error(error))
   }
@@ -55,10 +58,6 @@ const BookDetails = () => {
     setIsRentModalOpened(false)
   }
 
-  const onCloseRentHistoryDialog = () => {
-    setIsRentHistoryModalOpened(false)
-  }
-
   const deleteBookHandler = () => {
     removeBookRequest(bookDetails.Id)
       .then(() => {
@@ -69,17 +68,30 @@ const BookDetails = () => {
   }
 
   const rentBookHandler = () => {
-    postRentBook(bookDetails.Id).then((response) => {
-      toast(`${bookDetails.Title} has been successfully rented`)
-      console.log(response)
+    postRentBook(bookDetails.Id).then(() => {
+      toast.success(`${bookDetails.Title} has been successfully rented`)
+      fetchBook()
       setIsRentModalOpened(false)
     })
-    .catch((error) => toast.error( `${error} / Something went wrong. Book has NOT been rented`))
+    .catch(() => toast.error( 'No more available books for renting. Book has NOT been rented'))
   }
 
-  const getBookRentHistory = () => {
-    getBookHistory(bookDetails.Id).then((response) => {
-      console.log(response)
+  const getBookRentHistory = (bookId: number) => {
+    getBookHistory(bookId).then((response) => {
+      setRentalHistoryData(response.data)
+    })
+  }
+
+  const returnBookHandler = (rentId: number) => {
+    if (bookDetails.Quantity === bookDetails.Available) {
+      toast.error(`All copies of ${bookDetails.Title} have been returned`)
+      return
+    }
+    postReturnBook(rentId).then(() => {
+      toast.success(`${bookDetails.Title} has been returned`)
+      getBookRentHistory(bookDetails.Id)
+    }).catch(() => {
+      toast.error(`This copy of ${bookDetails.Title} has already been returned`)
     })
   }
 
@@ -133,7 +145,7 @@ const BookDetails = () => {
         </button>
         {isEditModalOpened && (
           <Modal onClose={() => setIsEditModalOpened(false)}>
-            <EditBookForm setIsEditModalOpened={setIsEditModalOpened} book={bookDetails} />
+            <EditBookForm fetchUpdatedBook={fetchBook} setIsEditModalOpened={setIsEditModalOpened} setBookDetails={setBookDetails} book={bookDetails} />
           </Modal>
         )}
         <button
@@ -169,12 +181,13 @@ const BookDetails = () => {
             />
           </Modal>
         )}
-        <button onClick={getBookRentHistory}>View History of Rentals</button>
+        <button onClick={() => setIsRentHistoryModalOpened(true)} className={styles['action-btn']}  style={{ background: '#eed9c4' }} >View History of Rentals</button>
         {isRentHistoryModalOpened && (
             <Modal onClose={() => setIsRentHistoryModalOpened(false)}>
             <RentHistoryDialog
-              closeRentHistoryDialog={onCloseRentHistoryDialog}
               book={bookDetails}
+              rentalHistoryData={rentalHistoryData}
+              returnBook={returnBookHandler}
             />
           </Modal>
         )}

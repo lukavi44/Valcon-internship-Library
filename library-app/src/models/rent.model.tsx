@@ -1,6 +1,7 @@
 import User from './user.model'
 
 export interface RentBookHistory {
+  Id: number
   User: User
   RentDate: string
   IsReturned: boolean
