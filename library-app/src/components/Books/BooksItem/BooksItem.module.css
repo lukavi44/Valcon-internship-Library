@@ -43,7 +43,6 @@ label {
 
 @media screen and (max-width: 426px) {
   .book-img {
-    /* object-fit: fill; */
     width: 100%;
   }
 

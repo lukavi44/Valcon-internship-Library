@@ -43,7 +43,6 @@
   .input {
     transition: none;
     width: auto;
-    padding-inline-start: 0;
     width: 100%;
   }
 

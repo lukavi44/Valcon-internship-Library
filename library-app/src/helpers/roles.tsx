@@ -7,7 +7,7 @@ export const currentUserAdmin = () => {
     const token = getAccessToken() || ''
     const decoded: Jwt | '' = token && jwt_decode(token);
     if (decoded === '') return false
-    return decoded[roleKey] === UserRole.Admin  
+    return decoded[roleKey] === UserRole.Admin
 }
 export const currentUserLibrarian = () => {
     const token = getAccessToken() || ''

@@ -18,7 +18,7 @@ const MainLayout = () => {
 
   return (
     <div className={styles.wrapp}>
-      <Sidebar accessToken={accessToken} />
+      <Sidebar/>
       <div className={styles['inside-wrapp']}>
         <Header
           setSearchTermValue={setSearchTermValue}
