@@ -6,12 +6,10 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Modal from '../Layout/Modal'
 import ManageBookForm from '../Books/BooksList/ManageBookForm'
+import { currentUserAdmin } from '../../helpers/roles'
+import { getAccessToken } from '../../helpers/manageLocalStorage'
 
-interface FooterProps {
-  accessToken: string | null
-}
-
-export const Footer = ({ accessToken }: FooterProps) => {
+export const Footer = () => {
   const [adminOptions, setAdminOptions] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -32,21 +30,13 @@ export const Footer = ({ accessToken }: FooterProps) => {
           <img src={home} alt='' />
         </button>
       </div>
-
-      {accessToken && (
+      {(currentUserAdmin(getAccessToken() || '')) &&
         <div className={styles['btn-holder']}>
-          <button>
-            <img src={account} alt='' />
+          <button onClick={() => setAdminOptions(!adminOptions)}>
+            <img src={showMore} alt='' />
           </button>
         </div>
-      )}
-
-      <div className={styles['btn-holder']}>
-        <button onClick={() => setAdminOptions(!adminOptions)}>
-          <img src={showMore} alt='' />
-        </button>
-      </div>
-
+      }
       {adminOptions && (
         <nav className={styles.sidebar}>
           <div className={styles['btn-holder']}>
@@ -55,13 +45,8 @@ export const Footer = ({ accessToken }: FooterProps) => {
             </button>
           </div>
           <div className={styles['btn-holder']}>
-            <button>
-              <img src={account} alt='' />
-            </button>
-          </div>
-          <div className={styles['btn-holder']}>
             <button className={styles['add-new-book']} onClick={() => setIsModalOpen(true)}>
-              Add New Book +
+              Add New Book
             </button>
           </div>
         </nav>

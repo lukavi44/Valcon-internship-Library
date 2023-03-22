@@ -49,7 +49,7 @@ const MainLayout = () => {
           />
         </Routes>
       </div>
-      <Footer accessToken={accessToken} />
+      <Footer/>
     </div>
   )
 }

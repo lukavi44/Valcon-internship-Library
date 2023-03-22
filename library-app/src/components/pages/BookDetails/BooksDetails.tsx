@@ -127,7 +127,7 @@ const BookDetails = () => {
         </div>
       </div>
       <div className={styles['container-right']}>
-        <img
+        <img className={styles['book-img']}
           src={bookDetails?.Cover ? `data:image/png;base64, ${bookDetails?.Cover}` : placeholder}
           alt='Book Cover'
         />

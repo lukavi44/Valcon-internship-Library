@@ -40,3 +40,15 @@ label {
 .book-description {
   word-break: break-word;
 }
+
+@media screen and (max-width: 426px) {
+  .book-img {
+    /* object-fit: fill; */
+    width: 100%;
+  }
+
+  .img-holder {
+    width: 150px;
+  }
+  
+}

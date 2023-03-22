@@ -110,7 +110,7 @@ img {
     width: 100%;
   }
 
-  img {
+  .book-img {
     max-width: 80%;
   }
 }
