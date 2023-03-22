@@ -1,0 +1,63 @@
+.book-holder {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 2rem;
+    height: 330px;
+}
+
+.carousel-root {
+    background: #faf0e6d4;
+    padding-top: 2rem;
+    display: flex;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    width: 65%;
+}
+
+.book-cover {
+    object-fit: contain;
+}
+
+.book-about {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.book-about h3 {
+    font-size: 1.8rem;
+}
+
+.book-details-btn {
+    padding: 1rem;
+    font-size: 1.1rem ;
+    background: #d9b99b 
+}
+
+.rent-counter {
+    font-size: 1.4rem;
+}
+
+span.bold {
+    font-weight: 700;
+    font-size: 1.6rem;
+}
+
+.date-holder {
+   display: flex;
+   gap: 0.5rem;
+   flex-direction: column;
+   font-size: 1.2rem;
+}
+
+@media screen and (max-width: 426px) {
+    .carousel-root {
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .book-cover {
+        max-width: 200px;
+    }
+}

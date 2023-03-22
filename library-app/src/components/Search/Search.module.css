@@ -37,13 +37,13 @@
 }
 @media screen and (max-width: 426px) {
   .search-wrapp {
-    width: unset;
+    width: 80%;
   }
 
   .input {
     transition: none;
     width: auto;
-    padding-inline-start: 0;
+    width: 100%;
   }
 
   .sort {

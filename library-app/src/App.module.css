@@ -1,7 +1,0 @@
-@media only screen and (min-width: 426px) {
-  .app-wrapper {
-    display: flex;
-    flex-direction: row;
-    height: 100vh;
-  }
-}

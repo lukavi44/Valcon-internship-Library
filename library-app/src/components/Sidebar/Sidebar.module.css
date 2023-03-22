@@ -4,7 +4,7 @@
 
 @media only screen and (min-width: 426px) {
   .header {
-    width: 230px;
+    width: 200px;
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -35,5 +35,6 @@
   .add-new-book {
     width: 50%;
     text-transform: uppercase;
+    font-size: 1.2rem;
   }
 }

@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useCallback } from 'react'
 import debounce from 'lodash.debounce'
 import styles from './Search.module.css'
 import search from '../../assets/icons/search.png'
-import sort from '../../assets/icons/sort.png'
 
 interface SearchProps {
-  setSearchTermValue: any
+  setSearchTermValue: Dispatch<SetStateAction<string>>
 }
 
 const Search = ({ setSearchTermValue }: SearchProps) => {
@@ -27,9 +26,6 @@ const Search = ({ setSearchTermValue }: SearchProps) => {
         id='search'
         onChange={debouncedChangeHandler}
       />
-      <button className={styles.sort}>
-        <img src={sort} alt='' />
-      </button>
     </div>
   )
 }

@@ -3,14 +3,49 @@
     display: flex;
     gap: 2rem;
     flex-direction: column;
+    max-height: 90vh;
+    overflow: scroll;
+}
+
+.sort-btn {
+    background: #faf0e6 ;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+}
+
+th {
+    background:#d9b99b ;
 }
 
 th, td {
     padding: 6px;
     text-align: center;
+    word-wrap: break-word;
+}
+
+tr {
+    background:#faf0e6 ;
+}
+
+tr:nth-of-type(2n) {
+   background:#e6c9ad  ;
 }
 
 .return-btn {
     padding: 0.5rem 1rem;
     background: #d9b99b;
+}
+
+@media screen and (max-width: 426px) {
+    .table-wrapper {
+        width: 100%;
+    }
+
+    .last-name {
+        padding: 20px;
+    }
+
+    .first-name {
+        display: none;
+    }
 }

@@ -18,7 +18,7 @@ const MainLayout = () => {
 
   return (
     <div className={styles.wrapp}>
-      <Sidebar accessToken={accessToken} />
+      <Sidebar/>
       <div className={styles['inside-wrapp']}>
         <Header
           setSearchTermValue={setSearchTermValue}
@@ -49,7 +49,7 @@ const MainLayout = () => {
           />
         </Routes>
       </div>
-      <Footer accessToken={accessToken} />
+      <Footer/>
     </div>
   )
 }
