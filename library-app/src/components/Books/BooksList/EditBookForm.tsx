@@ -134,6 +134,10 @@ const EditBookForm = ({ book, setIsEditModalOpened, setBookDetails, fetchUpdated
 
   const addAuthorHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+     if (authorForm.FirstName.trim() === '' || authorForm.LastName.trim() === ''){
+        toast.error('Both inputs must be filled')
+        return
+      }
     try {
       const form = new FormData()
 

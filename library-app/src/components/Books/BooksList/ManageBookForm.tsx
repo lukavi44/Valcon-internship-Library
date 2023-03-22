@@ -62,6 +62,10 @@ const ManageBookForm = () => {
 
   const addBookHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (formData.Isbn.trim() === '' || formData.Quantity === 0 || formData.Title.trim() === '') {
+        toast.error('Quantity, ISBN and Title inputs must be filled')
+        return
+      }
     try {
       const form = new FormData()
       form.append('Cover', requestCover)
@@ -87,6 +91,10 @@ const ManageBookForm = () => {
 
   const addAuthorHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (authorForm.FirstName.trim() === '' || authorForm.LastName.trim() === ''){
+        toast.error('Both inputs must be filled')
+        return
+      }
     try {
       const form = new FormData()
 
