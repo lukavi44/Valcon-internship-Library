@@ -8,7 +8,6 @@
   gap: 5rem;
   width: 80%;
   max-width: 100%;
-  align-items: center;
 }
 
 img {
@@ -30,6 +29,7 @@ img {
 .container-right {
   display: flex;
   flex-direction: column;
+  justify-content:  center;
   gap: 1rem;
 }
 
