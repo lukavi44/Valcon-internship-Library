@@ -14,7 +14,7 @@ import RentDialog from '../../Layout/RentDialog';
 import { getBookHistory, postRentBook, postReturnBook } from '../../../services/RentalServices.services';
 import RentHistoryDialog from '../../Layout/RentHistoryDialog';
 import { RentBookHistory } from '../../../models/rent.model';
-import { currentUserAdmin } from '../../../helpers/roles';
+import { currentUserAdmin, currentUserLibrarian, currentUserUser } from '../../../helpers/roles';
 
 const BookDetails = () => {
   const [bookDetails, setBookDetails] = useState<BookDetailsRequest>({
@@ -45,7 +45,9 @@ const BookDetails = () => {
     getOneBook(parseInt(id))
       .then((response) => {
         setBookDetails(response.data)
-        getBookRentHistory(response.data.Id)
+        if (currentUserAdmin() || currentUserUser()) {
+          getBookRentHistory(response.data.Id)
+        }
       })
       .catch((error) => toast.error(error))
   }
@@ -90,15 +92,28 @@ const BookDetails = () => {
     postReturnBook(rentId).then(() => {
       toast.success(`${bookDetails.Title} has been returned`)
       getBookRentHistory(bookDetails.Id)
+      fetchBook()
     }).catch(() => {
       toast.error(`This copy of ${bookDetails.Title} has already been returned`)
     })
   }
 
-  const sortIsReturned = () => {
+  const sortByIsReturned = () => {
+    const stateCopy = [...rentalHistoryData]    
+    stateCopy.sort((x, y) => {
+      if (x.IsReturned < y.IsReturned) return -1
+      if (x.IsReturned > y.IsReturned) return 1
+      return 0
+    })
+    setRentalHistoryData(stateCopy)
+  } 
+
+  const sortByRentDate = () => {
       const stateCopy = [...rentalHistoryData]
       stateCopy.sort((x, y) => {
-        return (x.IsReturned === y.IsReturned) ? 0 : x ? -1 : 1  
+        if (x.RentDate < y.RentDate) return -1
+        if (x.RentDate > y.RentDate) return 1
+        return 0
       })
     setRentalHistoryData(stateCopy)
   } 
@@ -107,7 +122,8 @@ const BookDetails = () => {
     <div className={styles.container}>
       <div className={styles['container-left']}>
         <h1>{bookDetails?.Title}</h1>
-        <ul>
+        <ul className={styles['authors-list']}>
+          <h4>Written by:</h4>
           {bookDetails.Authors.map((author) => (
             <li key={author.Id}>
               {author.Firstname} {author.Lastname}
@@ -115,37 +131,39 @@ const BookDetails = () => {
           ))}
         </ul>
         <div className={styles['about-book']}>
-          <h3>About {bookDetails.Title}</h3>
-          <p>{bookDetails?.Description}</p>
+          <h3>{bookDetails.Title} summary</h3>
+          <p className={styles.description}>{bookDetails?.Description}</p>
         </div>
-        <p>ISBN: {bookDetails.ISBN}</p>
         <div className={styles.date}>
         {bookDetails.PublishDate && <p>Publish Date:</p>}
         {bookDetails.PublishDate ? <p>{convertDateToString(bookDetails.PublishDate, 'dd.MM.yyyy')}</p> : ''}
         </div>
+        <p>ISBN: {bookDetails.ISBN}</p>
       </div>
       <div className={styles['container-right']}>
         <img className={styles['book-img']}
           src={bookDetails?.Cover ? `data:image/png;base64, ${bookDetails?.Cover}` : placeholder}
           alt='Book Cover'
         />
-        {currentUserAdmin() &&
+        {(currentUserAdmin() || currentUserLibrarian()) &&
           <div className={styles['book-quantity']}>
             <p>Quantity </p>
+            <div className={styles['quantity-number-holder']}>
             <p className={styles['book-quantity-number']}>{bookDetails.Quantity}</p>
+            </div>
           </div>}
         <div
           className={
             bookDetails.Available > 0 ? `${styles.available}` : `${styles['available-zero']}`
           }
         >
-          <p>Available</p>
-          {currentUserAdmin() && <p>{bookDetails.Available}</p>}
+          {bookDetails.Available > 0 ? <p>Available</p> : <p>Non Available</p>}
+          {(currentUserAdmin() || currentUserLibrarian()) && <p>{bookDetails.Available}</p>}
         </div>
       </div>
       <div className={styles['actions-btn-holder']}>
         {
-          currentUserAdmin() &&
+          (currentUserAdmin() || currentUserLibrarian()) &&
           <button
             style={{ background: '#d9b99b' }}
             className={styles['action-btn']}
@@ -162,7 +180,7 @@ const BookDetails = () => {
             <EditBookForm fetchUpdatedBook={fetchBook} setIsEditModalOpened={setIsEditModalOpened} setBookDetails={setBookDetails} book={bookDetails} />
           </Modal>
         )}
-        {currentUserAdmin() &&
+        {(currentUserAdmin() || currentUserLibrarian()) &&
           <button
             style={{ background: '#eed9c4' }}
             className={styles['action-btn']}
@@ -198,7 +216,7 @@ const BookDetails = () => {
             />
           </Modal>
         )}
-        {currentUserAdmin() &&
+        {(currentUserAdmin() || currentUserLibrarian()) &&
           <button onClick={() => setIsRentHistoryModalOpened(true)} className={styles['action-btn']} style={{ background: '#eed9c4' }} >View History of Rentals</button>}
         {isRentHistoryModalOpened && (
             <Modal onClose={() => setIsRentHistoryModalOpened(false)}>
@@ -206,7 +224,8 @@ const BookDetails = () => {
               book={bookDetails}
               rentalHistoryData={rentalHistoryData}
               returnBook={returnBookHandler}
-              sortIsReturned = { sortIsReturned}
+              sortByIsReturned={sortByIsReturned}
+              sortByRentDate={sortByRentDate}
             />
           </Modal>
         )}

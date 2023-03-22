@@ -19,6 +19,7 @@
 }
 
 .login-btn {
+  cursor: pointer;
   height: 100%;
   background: none;
   padding: 0 2rem;
@@ -38,7 +39,7 @@
   }
 
   .login-btn {
-    font-size: 12px;
+    font-size: 1.1rem;
     padding: 0;
     padding-right: 1rem;
   }

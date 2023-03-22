@@ -6,7 +6,7 @@
   margin: auto;
   background: white;
   gap: 5rem;
-  max-width: 70%;
+  max-width: 100%;
 }
 
 img {
@@ -19,6 +19,10 @@ img {
   flex-direction: column;
   justify-content: space-evenly;
   width: 25%;
+}
+
+.description {
+  word-break: break-word;
 }
 
 .container-right {
@@ -34,14 +38,29 @@ img {
 }
 
 .action-btn {
-  padding: 1rem 3rem;
+  padding: 1.3rem 3rem;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #d9b99b ;
+  color: rgb(40, 31, 31);
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
 .available {
   padding: 1rem;
   display: flex;
   justify-content: space-around;
-  background: green;
+  background: rgb(41, 148, 41);
+}
+.book-quantity p, .available p, .available-zero p {
+  width: 50%;
+  text-align: center;
+} 
+.book-quantity {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .available-zero {
@@ -51,18 +70,31 @@ img {
   background: red;
 }
 
-.book-quantity {
+.authors-list {
+  list-style: none;
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
   align-items: center;
+  padding: 0;
+  gap: 0.3rem;
+}
+
+.quantity-number-holder {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+}
+
+.quantity-number-holder p {
+background: #d9b99b;
+border-radius: 50%;
+width: 50px;
 }
 
 .book-quantity-number {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #d9b99b;
-  border-radius: 50%;
   width: 15%;
   padding: 1rem;
 }

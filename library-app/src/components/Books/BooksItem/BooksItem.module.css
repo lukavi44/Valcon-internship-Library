@@ -20,9 +20,6 @@
   height: 180px;
   object-fit: cover;
 }
-.img-holder:hover {
-  scale: 1.2;
-}
 
 .about-book {
   display: flex;
