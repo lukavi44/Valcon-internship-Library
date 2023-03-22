@@ -97,6 +97,14 @@ const BookDetails = () => {
     })
   }
 
+  const sortIsReturned = () => {
+      const stateCopy = [...rentalHistoryData]
+      stateCopy.sort((x, y) => {
+        return (x.IsReturned === y.IsReturned) ? 0 : x ? -1 : 1  
+      })
+    setRentalHistoryData(stateCopy)
+  } 
+
   return (
     <div className={styles.container}>
       <div className={styles['container-left']}>
@@ -112,55 +120,60 @@ const BookDetails = () => {
           <h3>About {bookDetails.Title}</h3>
           <p>{bookDetails?.Description}</p>
         </div>
-        <p>{bookDetails.ISBN}</p>
+        <p>ISBN: {bookDetails.ISBN}</p>
+        <div className={styles.date}>
         {bookDetails.PublishDate && <p>Publish Date:</p>}
         {bookDetails.PublishDate ? <p>{convertDateToString(bookDetails.PublishDate, 'dd.MM.yyyy')}</p> : ''}
+        </div>
       </div>
       <div className={styles['container-right']}>
         <img
           src={bookDetails?.Cover ? `data:image/png;base64, ${bookDetails?.Cover}` : placeholder}
           alt='Book Cover'
         />
-        <div className={styles['book-quantity']}>
-          <p>Quantity </p>
-          <p className={styles['book-quantity-number']}>{bookDetails.Quantity}</p>
-        </div>
+        {currentUserAdmin(getAccessToken() || '') &&
+          <div className={styles['book-quantity']}>
+            <p>Quantity </p>
+            <p className={styles['book-quantity-number']}>{bookDetails.Quantity}</p>
+          </div>}
         <div
           className={
             bookDetails.Available > 0 ? `${styles.available}` : `${styles['available-zero']}`
           }
         >
           <p>Available</p>
-          <p>{bookDetails.Available}</p>
+          {currentUserAdmin(getAccessToken() || '') && <p>{bookDetails.Available}</p>}
         </div>
       </div>
       <div className={styles['actions-btn-holder']}>
         {
           currentUserAdmin(getAccessToken() || '') &&
           <button
-          style={{ background: '#d9b99b' }}
-          className={styles['action-btn']}
-          id={styles.edit}
-          onClick={() => {
-            setIsEditModalOpened(true)
-          }}
+            style={{ background: '#d9b99b' }}
+            className={styles['action-btn']}
+            id={styles.edit}
+            onClick={() => {
+              setIsEditModalOpened(true)
+            }}
           >
-          Edit
-        </button>
+            Edit
+          </button>
         }
         {isEditModalOpened && (
           <Modal onClose={() => setIsEditModalOpened(false)}>
             <EditBookForm fetchUpdatedBook={fetchBook} setIsEditModalOpened={setIsEditModalOpened} setBookDetails={setBookDetails} book={bookDetails} />
           </Modal>
         )}
-        <button
-          style={{ background: '#eed9c4' }}
-          className={styles['action-btn']}
-          id={styles.delete}
-          onClick={() => setIsDeleteModalOpened(true)}
-        >
-          Delete
-        </button>
+        {currentUserAdmin(getAccessToken() || '') &&
+          <button
+            style={{ background: '#eed9c4' }}
+            className={styles['action-btn']}
+            id={styles.delete}
+            onClick={() => setIsDeleteModalOpened(true)}
+          >
+            Delete
+          </button>
+        }
         {isDeleteModalOpened && (
           <Modal onClose={() => setIsDeleteModalOpened(false)}>
             <DeleteDialog
@@ -170,6 +183,7 @@ const BookDetails = () => {
             />
           </Modal>
         )}
+        
         <button
           style={{ background: '#fff0db' }}
           className={styles['action-btn']}
@@ -186,13 +200,15 @@ const BookDetails = () => {
             />
           </Modal>
         )}
-        <button onClick={() => setIsRentHistoryModalOpened(true)} className={styles['action-btn']}  style={{ background: '#eed9c4' }} >View History of Rentals</button>
+        {currentUserAdmin(getAccessToken() || '') &&
+          <button onClick={() => setIsRentHistoryModalOpened(true)} className={styles['action-btn']} style={{ background: '#eed9c4' }} >View History of Rentals</button>}
         {isRentHistoryModalOpened && (
             <Modal onClose={() => setIsRentHistoryModalOpened(false)}>
             <RentHistoryDialog
               book={bookDetails}
               rentalHistoryData={rentalHistoryData}
               returnBook={returnBookHandler}
+              sortIsReturned = { sortIsReturned}
             />
           </Modal>
         )}
