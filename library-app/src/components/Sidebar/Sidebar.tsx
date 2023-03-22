@@ -2,18 +2,16 @@ import React, { useState } from 'react'
 import styles from './Sidebar.module.css'
 import home from '../../assets/icons/home.png'
 import account from '../../assets/icons/account.png'
-import showMore from '../../assets/icons/showMore.png'
 import { useNavigate } from 'react-router-dom'
 import Modal from '../Layout/Modal'
 import ManageBookForm from '../Books/BooksList/ManageBookForm'
-
+import { currentUserAdmin} from '../../helpers/roles'
 interface SidebarProps {
   accessToken: string | null
 }
 
 const Sidebar = ({ accessToken }: SidebarProps) => {
   const [isModalOpened, setIsModalOpened] = useState(false)
-  const [adminOptions, setAdminOptions] = useState(false)
 
   const navigateTo = useNavigate()
 
@@ -36,15 +34,7 @@ const Sidebar = ({ accessToken }: SidebarProps) => {
             </button>
           </div>
         )}
-        {accessToken && (
-          <div className={styles['btn-holder']} onClick={() => setAdminOptions(!adminOptions)}>
-            <button type='button'>
-              <img src={showMore} alt='' />
-            </button>
-          </div>
-        )}
-        {adminOptions && accessToken && (
-          <nav className={styles.sidebar}>
+        { currentUserAdmin(localStorage.getItem('accessToken') || '')  &&
             <div className={styles['btn-holder']}>
               <button
                 className={styles['add-new-book']}
@@ -54,8 +44,7 @@ const Sidebar = ({ accessToken }: SidebarProps) => {
                 Add New Book +
               </button>
             </div>
-          </nav>
-        )}
+        }
         {isModalOpened && (
           <Modal onClose={() => setIsModalOpened(false)}>
             <ManageBookForm />

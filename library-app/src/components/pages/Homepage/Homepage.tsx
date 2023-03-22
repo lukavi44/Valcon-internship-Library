@@ -75,7 +75,6 @@ const Homepage = ({ search, filter, sort, accessToken }: HomepageProps) => {
   return (
     <div id='homepage' className={styles.homepage}>
       <div className={styles.top}>
-      {/* <h1 className={styles['carousel-title']}>Top 10 most rented books</h1> */}
       <BookCarousel />
       </div>
       {books.length > 0 ? (

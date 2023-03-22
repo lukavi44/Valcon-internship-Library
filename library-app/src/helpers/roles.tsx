@@ -5,8 +5,6 @@ import jwt_decode from 'jwt-decode';
 export const currentUserAdmin = (token: string) => {
     const decoded: Jwt | '' = token && jwt_decode(token);
     if (decoded === '') return false
-    console.log(decoded[roleKey]);
-    
     return decoded[roleKey] === UserRole.Admin  
 }
 export const currentUserLibrarian = (token: string) => {
