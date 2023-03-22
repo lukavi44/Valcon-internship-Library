@@ -1,13 +1,9 @@
-import React, { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react'
-import search from '../../assets/icons/search.png'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import styles from './Header.module.css'
-import sort from '../../assets/icons/sort.png'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { deleteLocalStorage } from '../../helpers/manageLocalStorage'
 import Where from '../../models/where.model'
 import Search from '../Search/Search'
-import debounce from 'lodash.debounce'
-
 interface HeaderProps {
   setSearchTermValue: Dispatch<SetStateAction<string>>
   accessToken: string | null
@@ -19,6 +15,7 @@ interface HeaderProps {
 const Header = ({ setSearchTermValue, accessToken, setAccessToken}: HeaderProps) => {
   const [position, setPosition] = useState(window.scrollY)
   const [isVisible, setIsVisible] = useState(true)
+  const location = useLocation()
 
   const handleLogout = () => {
     setAccessToken('')
@@ -43,7 +40,7 @@ const Header = ({ setSearchTermValue, accessToken, setAccessToken}: HeaderProps)
         className={styles['header-container']}
         style={{ visibility: isVisible ? 'visible' : 'hidden' }}
       >
-        {accessToken && (
+        {(accessToken && location.pathname === '/' ) && (
           <div className={styles['header-left']}>
             <Search setSearchTermValue={setSearchTermValue} />
           </div>
