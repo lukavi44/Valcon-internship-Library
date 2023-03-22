@@ -44,6 +44,11 @@ span.bold {
     font-size: 1.6rem;
 }
 
+.carousel-root li > img {
+    height: 100px;
+    object-fit: cover;
+}
+
 .date-holder {
    display: flex;
    gap: 0.5rem;
@@ -59,5 +64,9 @@ span.bold {
 
     .book-cover {
         max-width: 200px;
+    }
+
+    .rent-counter {
+        display: none;
     }
 }

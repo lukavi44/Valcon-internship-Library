@@ -11,7 +11,7 @@ function App() {
         position={'top-right'}
         closeOnClick={false}
         pauseOnHover
-        theme={'dark'}
+        theme={'light'}
         draggable={false } />
     </>
   )

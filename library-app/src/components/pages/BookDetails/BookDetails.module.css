@@ -6,7 +6,9 @@
   margin: auto;
   background: white;
   gap: 5rem;
+  width: 80%;
   max-width: 100%;
+  align-items: center;
 }
 
 img {
@@ -113,6 +115,7 @@ width: 50px;
     justify-content: flex-start;
     align-items: center;
     border-radius: 0;
+    width: 90%;
   }
 
   .container-left {
