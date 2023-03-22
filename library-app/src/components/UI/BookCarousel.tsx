@@ -9,10 +9,11 @@ import { useNavigate } from 'react-router-dom';
 
 const BookCarousel = () => {
     const [mostRentedBooks, setMostRentedBooks] = useState<MostRentedBooks[]>([])
+    const rentCount = 10;
     const navigate = useNavigate()
     
     useEffect(() => {
-        getMostRentedBooks(10).then((response) => {
+        getMostRentedBooks(rentCount).then((response) => {
             setMostRentedBooks(response.data)
         }) 
    }, []) 
