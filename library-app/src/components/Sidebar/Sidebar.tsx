@@ -34,7 +34,7 @@ const Sidebar = ({ accessToken }: SidebarProps) => {
             </button>
           </div>
         )}
-        { currentUserAdmin(localStorage.getItem('accessToken') || '')  &&
+        { currentUserAdmin()  &&
             <div className={styles['btn-holder']}>
               <button
                 className={styles['add-new-book']}

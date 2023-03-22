@@ -15,8 +15,6 @@ import { getBookHistory, postRentBook, postReturnBook } from '../../../services/
 import RentHistoryDialog from '../../Layout/RentHistoryDialog';
 import { RentBookHistory } from '../../../models/rent.model';
 import { currentUserAdmin } from '../../../helpers/roles';
-import { getAccessToken } from '../../../helpers/manageLocalStorage';
-
 
 const BookDetails = () => {
   const [bookDetails, setBookDetails] = useState<BookDetailsRequest>({
@@ -131,7 +129,7 @@ const BookDetails = () => {
           src={bookDetails?.Cover ? `data:image/png;base64, ${bookDetails?.Cover}` : placeholder}
           alt='Book Cover'
         />
-        {currentUserAdmin(getAccessToken() || '') &&
+        {currentUserAdmin() &&
           <div className={styles['book-quantity']}>
             <p>Quantity </p>
             <p className={styles['book-quantity-number']}>{bookDetails.Quantity}</p>
@@ -142,12 +140,12 @@ const BookDetails = () => {
           }
         >
           <p>Available</p>
-          {currentUserAdmin(getAccessToken() || '') && <p>{bookDetails.Available}</p>}
+          {currentUserAdmin() && <p>{bookDetails.Available}</p>}
         </div>
       </div>
       <div className={styles['actions-btn-holder']}>
         {
-          currentUserAdmin(getAccessToken() || '') &&
+          currentUserAdmin() &&
           <button
             style={{ background: '#d9b99b' }}
             className={styles['action-btn']}
@@ -164,7 +162,7 @@ const BookDetails = () => {
             <EditBookForm fetchUpdatedBook={fetchBook} setIsEditModalOpened={setIsEditModalOpened} setBookDetails={setBookDetails} book={bookDetails} />
           </Modal>
         )}
-        {currentUserAdmin(getAccessToken() || '') &&
+        {currentUserAdmin() &&
           <button
             style={{ background: '#eed9c4' }}
             className={styles['action-btn']}
@@ -200,7 +198,7 @@ const BookDetails = () => {
             />
           </Modal>
         )}
-        {currentUserAdmin(getAccessToken() || '') &&
+        {currentUserAdmin() &&
           <button onClick={() => setIsRentHistoryModalOpened(true)} className={styles['action-btn']} style={{ background: '#eed9c4' }} >View History of Rentals</button>}
         {isRentHistoryModalOpened && (
             <Modal onClose={() => setIsRentHistoryModalOpened(false)}>

@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom'
 import Modal from '../Layout/Modal'
 import ManageBookForm from '../Books/BooksList/ManageBookForm'
 import { currentUserAdmin } from '../../helpers/roles'
-import { getAccessToken } from '../../helpers/manageLocalStorage'
 
 export const Footer = () => {
   const [adminOptions, setAdminOptions] = useState(false)
@@ -30,7 +29,7 @@ export const Footer = () => {
           <img src={home} alt='' />
         </button>
       </div>
-      {(currentUserAdmin(getAccessToken() || '')) &&
+      {(currentUserAdmin()) &&
         <div className={styles['btn-holder']}>
           <button onClick={() => setAdminOptions(!adminOptions)}>
             <img src={showMore} alt='' />
