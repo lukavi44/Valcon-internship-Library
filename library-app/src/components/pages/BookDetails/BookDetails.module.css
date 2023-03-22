@@ -88,8 +88,29 @@ img {
     gap: 1rem;
   }
 
+  .container-right {
+    align-items: center;
+    width: 100%;
+  }
+
   .actions-btn-holder {
     width: 100%;
     gap: 5px;
+  }
+
+  .book-quantity {
+    width: 100%;
+  }
+
+  .available {
+    width: 100%;
+  }
+
+  .available-zero {
+    width: 100%;
+  }
+
+  img {
+    max-width: 80%;
   }
 }

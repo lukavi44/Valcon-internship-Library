@@ -35,5 +35,6 @@
   .add-new-book {
     width: 50%;
     text-transform: uppercase;
+    font-size: 1.2rem;
   }
 }

@@ -3,6 +3,8 @@
     display: flex;
     gap: 2rem;
     flex-direction: column;
+    max-height: 90vh;
+    overflow: scroll;
 }
 
 th, td {
@@ -13,4 +15,14 @@ th, td {
 .return-btn {
     padding: 0.5rem 1rem;
     background: #d9b99b;
+}
+
+@media screen and (max-width: 426px) {
+    .table-wrapper {
+        width: 100%;
+    }
+
+    .first-name {
+        display: none;
+    }
 }
