@@ -9,8 +9,19 @@
     display: flex;
     margin-bottom: 2rem;
     flex-wrap: wrap;
+    /* width: 60%; */
 }
 
 .book-cover {
-object-fit: contain;
+    object-fit: contain;
+}
+
+.book-about {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.book-details-btn {
+    padding: 1rem;
 }
